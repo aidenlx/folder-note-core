@@ -15,7 +15,7 @@ Provide core features and API for folder notes.
 
 ## Compatibility
 
-The required API feature is only available for Obsidian v0.9.12+.
+The required API feature is only available for Obsidian v0.12.5+.
 
 ## Installation
 
