@@ -7,17 +7,24 @@ import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
 import API from "./typings/api";
 
+const ALX_FOLDER_NOTE = "alx-folder-note";
 export default class FNCore extends Plugin {
   settings: FNCoreSettings = DEFAULT_SETTINGS;
   vaultHandler = new VaultHandler(this);
   finder: NoteFinder;
   api: API;
 
+  settingTab = new FNCoreSettingTab(this);
+
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
     let finder = new NoteFinder(this);
     this.finder = finder;
+    let plugin = this;
     this.api = {
+      get renderCoreSettings() {
+        return plugin.settingTab.renderCoreSettings;
+      },
       importSettings: (cfg) => {
         if (cfg.folderNotePref !== undefined) {
           switch (cfg.folderNotePref) {
@@ -73,7 +80,8 @@ export default class FNCore extends Plugin {
 
     await this.loadSettings();
 
-    this.addSettingTab(new FNCoreSettingTab(this.app, this));
+    if (!this.app.plugins.enabledPlugins.has(ALX_FOLDER_NOTE))
+      this.addSettingTab(this.settingTab);
 
     AddOptionsForNote(this);
     AddOptionsForFolder(this);

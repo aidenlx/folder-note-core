@@ -8,12 +8,12 @@ interface OldConfig {
   deleteOutsideNoteWithFolder: boolean;
   indexName: string;
   modifierForNewNote: Modifier;
-  hideNoteInExplorer: boolean;
   autoRename: boolean;
   folderNoteTemplate: string;
 }
 export default interface FolderNoteAPI {
   importSettings(settings: Partial<OldConfig>): void;
+  renderCoreSettings(target: HTMLElement): void;
 
   getFolderFromNote(note: TFile | string): TFolder | null;
 

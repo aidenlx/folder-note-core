@@ -8,7 +8,6 @@ export interface FNCoreSettings {
   deleteOutsideNoteWithFolder: boolean;
   indexName: string;
   modifierForNewNote: Modifier;
-  hideNoteInExplorer: boolean;
   autoRename: boolean;
   folderNoteTemplate: string;
 }
@@ -18,36 +17,35 @@ export const DEFAULT_SETTINGS: FNCoreSettings = {
   deleteOutsideNoteWithFolder: true,
   indexName: "_about_",
   modifierForNewNote: "Meta",
-  hideNoteInExplorer: true,
   autoRename: true,
   folderNoteTemplate: "# {{FOLDER_NAME}}",
 };
 
 export class FNCoreSettingTab extends PluginSettingTab {
-  plugin: FNCore;
-
-  constructor(app: App, plugin: FNCore) {
-    super(app, plugin);
-    this.plugin = plugin;
+  constructor(public plugin: FNCore) {
+    super(plugin.app, plugin);
   }
 
   display(): void {
     let { containerEl } = this;
     containerEl.empty();
-
-    this.setNoteLoc();
-    if (this.plugin.settings.folderNotePref === NoteLoc.Index)
-      this.setIndexName();
-    else if (this.plugin.settings.folderNotePref === NoteLoc.Outside)
-      this.setDeleteWithFolder();
-    this.setTemplate();
-    this.setModifier();
-    if (this.plugin.settings.folderNotePref !== NoteLoc.Index)
-      this.setAutoRename();
+    this.renderCoreSettings(containerEl);
   }
 
-  setDeleteWithFolder() {
-    new Setting(this.containerEl)
+  renderCoreSettings = (target: HTMLElement) => {
+    this.setNoteLoc(target);
+    if (this.plugin.settings.folderNotePref === NoteLoc.Index)
+      this.setIndexName(target);
+    else if (this.plugin.settings.folderNotePref === NoteLoc.Outside)
+      this.setDeleteWithFolder(target);
+    this.setTemplate(target);
+    this.setModifier(target);
+    if (this.plugin.settings.folderNotePref !== NoteLoc.Index)
+      this.setAutoRename(target);
+  };
+
+  setDeleteWithFolder = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Delete Outside Note with Folder")
       .setDesc("Delete folder note outside when folder is deleted")
       .addToggle((toggle) =>
@@ -58,9 +56,9 @@ export class FNCoreSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           }),
       );
-  }
-  setNoteLoc() {
-    new Setting(this.containerEl)
+  };
+  setNoteLoc = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Preference for Note File Location")
       .setDesc(
         createFragment((el) => {
@@ -94,9 +92,9 @@ export class FNCoreSettingTab extends PluginSettingTab {
             this.display();
           });
       });
-  }
-  setIndexName() {
-    new Setting(this.containerEl)
+  };
+  setIndexName = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Name for Index File")
       .setDesc("Set the note name to be recognized as index file for folders")
       .addText((text) => {
@@ -109,9 +107,9 @@ export class FNCoreSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.indexName)
           .onChange(debounce(onChange, 500, true));
       });
-  }
-  setTemplate() {
-    new Setting(this.containerEl)
+  };
+  setTemplate = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Folder Note Template")
       .setDesc(
         createFragment((descEl) => {
@@ -133,9 +131,9 @@ export class FNCoreSettingTab extends PluginSettingTab {
         text.inputEl.rows = 8;
         text.inputEl.cols = 30;
       });
-  }
-  setModifier() {
-    new Setting(this.containerEl)
+  };
+  setModifier = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Modifier for New Note")
       .setDesc("Choose a modifier to click folders with to create folder notes")
       .addDropdown((dropDown) => {
@@ -164,9 +162,9 @@ export class FNCoreSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           });
       });
-  }
-  setAutoRename() {
-    new Setting(this.containerEl)
+  };
+  setAutoRename = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
       .setName("Auto Sync")
       .setDesc("Keep name and location of folder note and folder in sync")
       .addToggle((toggle) => {
@@ -176,5 +174,5 @@ export class FNCoreSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
-  }
+  };
 }
