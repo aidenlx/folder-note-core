@@ -1,6 +1,20 @@
-import { TFile, TFolder } from "obsidian";
+import { Modifier, TFile, TFolder } from "obsidian";
 
+interface OldConfig {
+  /**
+   *  Index=0, Inside=1, Outside=2,
+   */
+  folderNotePref: 0 | 1 | 2;
+  deleteOutsideNoteWithFolder: boolean;
+  indexName: string;
+  modifierForNewNote: Modifier;
+  hideNoteInExplorer: boolean;
+  autoRename: boolean;
+  folderNoteTemplate: string;
+}
 export default interface FolderNoteAPI {
+  importSettings(settings: Partial<OldConfig>): void;
+
   getFolderFromNote(note: TFile | string): TFolder | null;
 
   getFolderNote(folder: TFolder): TFile | null;

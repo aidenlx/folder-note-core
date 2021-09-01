@@ -1,14 +1,6 @@
-import {
-  App,
-  debounce,
-  Debouncer,
-  Notice,
-  Plugin,
-  PluginManifest,
-  TFile,
-  TFolder,
-} from "obsidian";
+import { App, Plugin, PluginManifest, TFile, TFolder } from "obsidian";
 
+import { NoteLoc } from "./misc";
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteFinder from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
@@ -26,6 +18,29 @@ export default class FNCore extends Plugin {
     let finder = new NoteFinder(this);
     this.finder = finder;
     this.api = {
+      importSettings: (cfg) => {
+        if (cfg.folderNotePref !== undefined) {
+          switch (cfg.folderNotePref) {
+            case 0:
+              cfg.folderNotePref = NoteLoc.Index;
+              break;
+            case 1:
+              cfg.folderNotePref = NoteLoc.Inside;
+              break;
+            case 2:
+              cfg.folderNotePref = NoteLoc.Outside;
+              break;
+            default:
+              break;
+          }
+          let toImport = Object.fromEntries(
+            Object.entries(cfg).filter(([k, v]) => v !== undefined),
+          ) as FNCoreSettings;
+
+          this.settings = { ...this.settings, ...toImport };
+          this.saveSettings();
+        }
+      },
       get getFolderFromNote() {
         return finder.getFolderFromNote;
       },
