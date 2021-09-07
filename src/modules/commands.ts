@@ -9,7 +9,6 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     LinkToParentFolder,
     DeleteLinkedFolder,
     DeleteNoteAndLinkedFolder,
-    getFolderFromNote,
   } = plugin.finder;
 
   plugin.addCommand({
@@ -57,7 +56,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     hotkeys: [],
   });
   plugin.registerEvent(
-    plugin.app.workspace.on("file-menu", (menu, af, source) => {
+    plugin.app.workspace.on("file-menu", async (menu, af, source) => {
       if (
         (source === "file-explorer-context-menu" ||
           source === "pane-more-options" ||
@@ -73,7 +72,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
               .onClick(() => LinkToParentFolder(af)),
           );
         }
-        if (createFolderForNote(af, true)) {
+        if (await createFolderForNote(af, true)) {
           menu.addItem((item) =>
             item
               .setIcon("create-new")
