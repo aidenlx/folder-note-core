@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/aidenlx/folder-note-core/compare/1.0.0...1.0.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* **commands:** remove source restriction for file-menu ([4b6d702](https://github.com/aidenlx/folder-note-core/commit/4b6d70241fa6d47715b87fd11d45750b3d7ab13c))
+
 # [1.0.0](https://github.com/aidenlx/folder-note-core/compare/0.2.0...1.0.0) (2021-09-07)
 
 
