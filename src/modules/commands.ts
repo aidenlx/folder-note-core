@@ -57,13 +57,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
   });
   plugin.registerEvent(
     plugin.app.workspace.on("file-menu", async (menu, af, source) => {
-      if (
-        (source === "file-explorer-context-menu" ||
-          source === "pane-more-options" ||
-          source === "link-context-menu") &&
-        af instanceof TFile &&
-        af.extension === "md"
-      ) {
+      if (af instanceof TFile && af.extension === "md") {
         if (LinkToParentFolder(af, true)) {
           menu.addItem((item) =>
             item
@@ -79,8 +73,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
               .setTitle("Make Doc Folder Note")
               .onClick(() => {
                 createFolderForNote(af);
-                if (source === "link-context-menu")
-                  plugin.app.workspace.openLinkText(af.path, "", false);
+                plugin.app.workspace.openLinkText(af.path, "", false);
               }),
           );
         }
@@ -104,7 +97,7 @@ export const AddOptionsForFolder = (plugin: FNCore) => {
   const { DeleteFolderNote, CreateFolderNote } = plugin.finder;
   plugin.registerEvent(
     plugin.app.workspace.on("file-menu", (menu, af, source) => {
-      if (source === "file-explorer-context-menu" && af instanceof TFolder) {
+      if (af instanceof TFolder) {
         if (DeleteFolderNote(af, true))
           menu.addItem((item) =>
             item
