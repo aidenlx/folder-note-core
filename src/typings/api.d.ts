@@ -1,4 +1,4 @@
-import { Modifier, TFile, TFolder } from "obsidian";
+import { TFile, TFolder } from "obsidian";
 
 interface OldConfig {
   /**
@@ -7,7 +7,6 @@ interface OldConfig {
   folderNotePref: 0 | 1 | 2;
   deleteOutsideNoteWithFolder: boolean;
   indexName: string;
-  modifierForNewNote: Modifier;
   autoRename: boolean;
   folderNoteTemplate: string;
 }

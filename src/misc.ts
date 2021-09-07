@@ -1,35 +1,14 @@
-import assertNever from "assert-never";
-import { Modifier, TAbstractFile, TFile, TFolder } from "obsidian";
+import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { dirname, extname, join } from "path";
 
 export const isMd = (file: TFile | string) =>
   typeof file === "string" ? extname(file) === ".md" : file.extension === "md";
-
-export const isMac = () => navigator.userAgent.includes("Macintosh");
 
 export enum NoteLoc {
   Index,
   Inside,
   Outside,
 }
-
-export const isModifier = (evt: MouseEvent, pref: Modifier): boolean => {
-  const { altKey, metaKey, ctrlKey, shiftKey } = evt;
-  switch (pref) {
-    case "Mod":
-      return isMac() ? metaKey : ctrlKey;
-    case "Ctrl":
-      return ctrlKey;
-    case "Meta":
-      return metaKey;
-    case "Shift":
-      return shiftKey;
-    case "Alt":
-      return altKey;
-    default:
-      assertNever(pref);
-  }
-};
 
 /**
  * @param newName include extension

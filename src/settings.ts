@@ -1,13 +1,12 @@
-import { App, debounce, Modifier, PluginSettingTab, Setting } from "obsidian";
+import { debounce, PluginSettingTab, Setting } from "obsidian";
 
 import FNCore from "./fnc-main";
-import { isMac, NoteLoc } from "./misc";
+import { NoteLoc } from "./misc";
 
 export interface FNCoreSettings {
   folderNotePref: NoteLoc;
   deleteOutsideNoteWithFolder: boolean;
   indexName: string;
-  modifierForNewNote: Modifier;
   autoRename: boolean;
   folderNoteTemplate: string;
 }
@@ -16,7 +15,6 @@ export const DEFAULT_SETTINGS: FNCoreSettings = {
   folderNotePref: NoteLoc.Inside,
   deleteOutsideNoteWithFolder: true,
   indexName: "_about_",
-  modifierForNewNote: "Meta",
   autoRename: true,
   folderNoteTemplate: "# {{FOLDER_NAME}}",
 };
@@ -39,7 +37,6 @@ export class FNCoreSettingTab extends PluginSettingTab {
     else if (this.plugin.settings.folderNotePref === NoteLoc.Outside)
       this.setDeleteWithFolder(target);
     this.setTemplate(target);
-    this.setModifier(target);
     if (this.plugin.settings.folderNotePref !== NoteLoc.Index)
       this.setAutoRename(target);
   };
@@ -130,37 +127,6 @@ export class FNCoreSettingTab extends PluginSettingTab {
           .onChange(debounce(onChange, 500, true));
         text.inputEl.rows = 8;
         text.inputEl.cols = 30;
-      });
-  };
-  setModifier = (containerEl: HTMLElement) => {
-    new Setting(containerEl)
-      .setName("Modifier for New Note")
-      .setDesc("Choose a modifier to click folders with to create folder notes")
-      .addDropdown((dropDown) => {
-        const windowsOpts: Record<Modifier, string> = {
-          Mod: "Ctrl (Cmd in macOS)",
-          Ctrl: "Ctrl (Ctrl in macOS)",
-          Meta: "⊞ Win",
-          Shift: "Shift",
-          Alt: "Alt",
-        };
-        const macOSOpts: Record<Modifier, string> = {
-          Mod: "⌘ Cmd (Ctrl)",
-          Ctrl: "⌃ Control",
-          Meta: "⌘ Cmd (Win)",
-          Shift: "⇧ Shift",
-          Alt: "⌥ Option",
-        };
-
-        const options = isMac() ? macOSOpts : windowsOpts;
-
-        dropDown
-          .addOptions(options)
-          .setValue(this.plugin.settings.modifierForNewNote.toString())
-          .onChange(async (value: string) => {
-            this.plugin.settings.modifierForNewNote = value as Modifier;
-            await this.plugin.saveSettings();
-          });
       });
   };
   setAutoRename = (containerEl: HTMLElement) => {
