@@ -195,14 +195,22 @@ export default class NoteFinder {
     const newFolderPath = this.getFolderPath(file, true),
       folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
     if (folderExist) {
-      new Notice("Folder already exists");
+      console.info(
+        "createFolderForNote(%o): folder already exists",
+        file,
+        file.path,
+      );
+      if (!dryrun) new Notice("Folder already exists");
     } else if (!newFolderPath) {
       console.info(
         "createFolderForNote(%o): no vaild linked folder path for %s",
         file,
         file.path,
       );
-    } else if (!dryrun) {
+      if (!dryrun) new Notice("No vaild linked folder path for: " + file.path);
+    }
+
+    if (!folderExist && newFolderPath && !dryrun) {
       await this.vault.createFolder(newFolderPath);
       let newNotePath: string | null;
       switch (this.settings.folderNotePref) {
@@ -220,7 +228,7 @@ export default class NoteFinder {
       }
       if (newNotePath) this.vault.rename(file, newNotePath);
     }
-    return !!folderExist;
+    return !!(!folderExist && newFolderPath);
   };
 
   // Folder Operations
