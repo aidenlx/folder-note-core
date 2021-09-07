@@ -1,3 +1,28 @@
+# [1.0.0](https://github.com/aidenlx/folder-note-core/compare/0.2.0...1.0.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* **commands:** fix createFolderForNote() check not using await ([7a26e60](https://github.com/aidenlx/folder-note-core/commit/7a26e60e2f17a7fb81ca497de24557db4bfcf97e))
+* **resolver:** fix invaild path returned when given file/folder's parent is root dir ([140f1c4](https://github.com/aidenlx/folder-note-core/commit/140f1c469007b69a62b6f3301a278994d79803da))
+* **settings:** move mod key setting back to alx-folder-note ([fec1f21](https://github.com/aidenlx/folder-note-core/commit/fec1f212f32a50cebbff1541ca69deccfd6797ff))
+
+
+### Features
+
+* **api:** add api ready event ([e6b4779](https://github.com/aidenlx/folder-note-core/commit/e6b47797ce276ce29e66f19d29ce1e7bcf9f15f7))
+* **api:** add util lib for npm package ([6aadaf4](https://github.com/aidenlx/folder-note-core/commit/6aadaf45df0ea603f33b719608d1add5ff066ced))
+* **api:** expose getNewFolderNote(), getFolderNotePath() and getFolderPath() ([9642cc6](https://github.com/aidenlx/folder-note-core/commit/9642cc6ff403e73e7aa14204baeff7e550c09858))
+* **api:** update api import: no manual types.d.ts needed ([048342c](https://github.com/aidenlx/folder-note-core/commit/048342c0cb7e03d786f6553418f3fb5e5dc202dc))
+
+
+### BREAKING CHANGES
+
+* **api:** FolderNoteAPI is no longer a default export
+* **api:** - getFolderNote() no longer accept second arg when given path
+- getFolderNote()
+and getFolderFromNote() will return null when given file invaild (detail provided in console)
+
 # [0.2.0](https://github.com/aidenlx/folder-note-core/compare/0.1.0...0.2.0) (2021-09-01)
 
 
