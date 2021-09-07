@@ -38,41 +38,37 @@ export default class NoteFinder {
       console.info("getFolderPath(%o): given file not markdown", note);
       return null;
     }
-    let parent: string | null, base: string;
+    let parent: string, base: string;
     if (note instanceof TFile) {
       base = note.basename;
-      parent = getParentPath(note.path);
+      parent = getParentPath(note.path) ?? "";
     } else {
       base = parse(note).name;
-      parent = getParentPath(note);
+      parent = getParentPath(note) ?? "";
     }
+
+    if (!parent) {
+      console.info("getFolderPath(%o): no folder note for root dir", note);
+      return null;
+    }
+
     const getSiblingFolder = () => {
-      if (parent === null) return base;
+      if (parent === "/") return base;
       else return join(parent, base);
     };
     switch (this.settings.folderNotePref) {
       case NoteLoc.Index:
         if (newFolder) return getSiblingFolder();
-        else if (parent && base === this.settings.indexName) return parent;
+        else if (base === this.settings.indexName) return parent;
         else {
-          if (!parent)
-            console.info(
-              "getFolderPath(%o): no folder note for root dir",
-              note,
-            );
-          else console.info("getFolderPath(%o): note name invaild", note);
+          console.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Inside:
         if (newFolder) return getSiblingFolder();
-        else if (parent && base === basename(parent)) return parent;
+        else if (base === basename(parent)) return parent;
         else {
-          if (!parent)
-            console.info(
-              "getFolderPath(%o): no folder note for root dir",
-              note,
-            );
-          else console.info("getFolderPath(%o): note name invaild", note);
+          console.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Outside: {
@@ -134,7 +130,7 @@ export default class NoteFinder {
     return {
       dir,
       name: basename + ".md",
-      path: join(dir, basename + ".md"),
+      path: dir === "/" ? basename + ".md" : join(dir, basename + ".md"),
     };
   };
 
