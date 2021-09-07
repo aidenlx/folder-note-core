@@ -10,19 +10,32 @@ interface OldConfig {
   autoRename: boolean;
   folderNoteTemplate: string;
 }
+
+export type FolderNotePath = {
+  /** the parent directory */
+  dir: string;
+  /** the file name (including extension) */
+  name: string;
+  /** full filepath that can be used to get TFile */
+  path: string;
+} | null;
 export default interface FolderNoteAPI {
   importSettings(settings: Partial<OldConfig>): void;
   renderCoreSettings(target: HTMLElement): void;
 
   getFolderFromNote(note: TFile | string): TFolder | null;
-
-  getFolderNote(folder: TFolder): TFile | null;
   /**
-   * @param oldPath oldpath of target folder
-   * @param folder renamed folder
+   * Get path of given note/notePath's folder based on setting
+   * @param note notePath or note TFile
+   * @param newFolder if the path is used to create new folder
+   * @returns folder path, will return null if note basename invaild and newFolder=false
    */
-  getFolderNote(oldPath: string, folder: TFolder): TFile | null;
-  getFolderNote(folder: string | TFolder, findNoteIn?: TFolder): TFile | null;
+  getFolderPath(note: TFile | string, newFolder: boolean): string | null;
+
+  getFolderNote(folder: TFolder | string): TFile | null;
+  /** Get the path to the folder note for given file based on setting,
+   * @returns not guaranteed to exists  */
+  getFolderNotePath(folder: TFolder | string): FolderNotePath;
 
   /**
    * @returns return false if no linked folder found
@@ -51,4 +64,12 @@ export default interface FolderNoteAPI {
    * @returns return false if folder note already exists
    */
   CreateFolderNote(folder: TFolder, dryrun?: boolean): boolean;
+}
+
+import "obsidian";
+
+declare module "obsidian" {
+  interface Vault {
+    exists(normalizedPath: string, sensitive?: boolean): Promise<boolean>;
+  }
 }

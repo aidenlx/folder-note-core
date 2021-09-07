@@ -63,7 +63,7 @@ export default class VaultHandler {
     // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
     function getOldLinked(af: TAbstractFile): TFile | TFolder | null {
       if (af instanceof TFolder) {
-        return oldPath ? getFolderNote(oldPath, af) : null;
+        return oldPath ? getFolderNote(oldPath) : null;
       } else if (af instanceof TFile) {
         return oldPath && isMd(oldPath) ? getFolderFromNote(oldPath) : null;
       } else return null;
@@ -120,13 +120,13 @@ export default class VaultHandler {
 
       const renameTo =
         af instanceof TFolder
-          ? getFolderNotePath(af).path
+          ? getFolderNotePath(af)?.path ?? ""
           : af instanceof TFile
-          ? getRenamedPath(oldLinked, af.basename)
+          ? getRenamedPath(oldLinked, af.basename) ?? ""
           : "";
 
       if (this.shouldRename(af, oldPath))
-        if (!newExists) {
+        if (!newExists && renameTo) {
           this.rename(oldLinked, renameTo);
           afOp(
             af,
@@ -146,11 +146,12 @@ export default class VaultHandler {
           return;
         } else {
           const target =
-            oldLinked instanceof TFile ? "folder note" : "linked folder";
-          new Notice(
-            `Failed to sync name of ${target}: ` +
-              `${target} ${basename(renameTo)} already exists`,
-          );
+              oldLinked instanceof TFile ? "folder note" : "linked folder",
+            baseMessage = `Failed to sync name of ${target}: `,
+            errorMessage = newExists
+              ? `${target} ${basename(renameTo)} already exists`
+              : "check console for more details";
+          new Notice(baseMessage + errorMessage);
         }
 
       // reset old linked folder note/folder mark when no rename is performed

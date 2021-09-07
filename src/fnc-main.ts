@@ -48,11 +48,20 @@ export default class FNCore extends Plugin {
           this.saveSettings();
         }
       },
+      get getNewFolderNote() {
+        return plugin.getNewFolderNote;
+      },
       get getFolderFromNote() {
         return finder.getFolderFromNote;
       },
+      get getFolderPath() {
+        return finder.getFolderPath;
+      },
       get getFolderNote() {
         return finder.getFolderNote;
+      },
+      get getFolderNotePath() {
+        return finder.getFolderNotePath;
       },
       get DeleteLinkedFolder() {
         return finder.DeleteLinkedFolder;
@@ -108,7 +117,7 @@ export default class FNCore extends Plugin {
     await this.saveData(this.settings);
   }
 
-  getNewFolderNote = (folder: TFolder): string =>
+  getNewFolderNote: API["getNewFolderNote"] = (folder) =>
     this.settings.folderNoteTemplate
       .replace(/{{FOLDER_NAME}}/g, folder.name)
       .replace(/{{FOLDER_PATH}}/g, folder.path);

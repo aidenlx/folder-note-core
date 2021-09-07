@@ -12,11 +12,17 @@ export enum NoteLoc {
 
 /**
  * @param newName include extension
+ * @returns null if given root dir
  */
-export const getRenamedPath = (af: TAbstractFile, newName: string) =>
-  join(getParentPath(af.path), newName);
+export const getRenamedPath = (af: TAbstractFile, newName: string) => {
+  const dir = getParentPath(af.path);
+  return dir ? join(dir, newName) : dir;
+};
 
-export const getParentPath = (src: string) => {
+export const getParentPath = (src: string): string | null => {
+  // if root dir given
+  if (src === "/") return null;
+
   const path = dirname(src);
   if (path === ".") return "/";
   else return path;

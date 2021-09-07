@@ -1,35 +1,10 @@
 import assertNever from "assert-never";
 import { Modal, Notice, TFile, TFolder } from "obsidian";
-import { basename, join, parse } from "path";
+import { basename, extname, join, parse } from "path";
 
 import FNCore from "../fnc-main";
 import { getParentPath, isMd, NoteLoc } from "../misc";
-import API from "../typings/api";
-
-const getFileInfo = (
-  note: TFile | string,
-): { base: string; parent: string } => {
-  let parent: string, base: string;
-  if (note instanceof TFile) {
-    base = note.basename;
-    parent = getParentPath(note.path);
-  } else {
-    base = parse(note).name;
-    parent = getParentPath(note);
-  }
-  return { base, parent };
-};
-
-type folderNotePath = {
-  info: [findIn: string, noteBaseName: string];
-  path: string;
-};
-
-type FolderOp = (
-  folder: TFolder,
-  dryrun: boolean,
-) => boolean | Promise<boolean>;
-type NoteOp = (note: TFile, dryrun: boolean) => boolean | Promise<boolean>;
+import API, { FolderNotePath } from "../typings/api";
 
 export default class NoteFinder {
   plugin: FNCore;
@@ -44,122 +19,111 @@ export default class NoteFinder {
     return this.plugin.app.vault;
   }
 
+  getFolderFromNote: API["getFolderFromNote"] = (note) => {
+    if (!isMd(note)) return null;
+    const folderPath = this.getFolderPath(note, false);
+    if (!folderPath) return null;
+    const folder = this.vault.getAbstractFileByPath(folderPath);
+    if (folder && folder instanceof TFolder) return folder;
+    else return null;
+  };
   /**
    * Get path of given note/notePath's folder based on setting
    * @param note notePath or note TFile
    * @param newFolder if the path is used to create new folder
-   * @returns folder path
+   * @returns folder path, will return null if note basename invaild and newFolder=false
    */
-  getFolderPath = (note: TFile | string, newFolder = false): string => {
-    const { parent, base } = getFileInfo(note);
+  getFolderPath: API["getFolderPath"] = (note, newFolder = false) => {
+    if (!isMd(note)) {
+      console.info("given file not markdown");
+      return null;
+    }
+    let parent: string | null, base: string;
+    if (note instanceof TFile) {
+      base = note.basename;
+      parent = getParentPath(note.path);
+    } else {
+      base = parse(note).name;
+      parent = getParentPath(note);
+    }
     const getSiblingFolder = () => {
-      if (parent === "/") return base;
+      if (parent === null) return base;
       else return join(parent, base);
     };
     switch (this.settings.folderNotePref) {
       case NoteLoc.Index:
+        if (newFolder) return getSiblingFolder();
+        else if (parent && base === this.settings.indexName) return parent;
+        else {
+          if (!parent) console.info("no folder note for root dir");
+          else console.info("note name invaild");
+          return null;
+        }
       case NoteLoc.Inside:
         if (newFolder) return getSiblingFolder();
-        else return parent;
-      case NoteLoc.Outside:
-        return getSiblingFolder();
+        else if (parent && base === basename(parent)) return parent;
+        else {
+          if (!parent) console.info("no folder note for root dir");
+          else console.info("note name invaild");
+          return null;
+        }
+      case NoteLoc.Outside: {
+        const dir = getSiblingFolder();
+        if (newFolder || base === basename(dir)) return dir;
+        else {
+          console.info("note name invaild");
+          return null;
+        }
+      }
       default:
         assertNever(this.settings.folderNotePref);
     }
-  };
-
-  getFolderFromNote: API["getFolderFromNote"] = (note) => {
-    if (!isMd(note)) return null;
-    const { parent, base } = getFileInfo(note);
-    // check if folder note name vaild
-    switch (this.settings.folderNotePref) {
-      case NoteLoc.Index:
-        if (base !== this.settings.indexName) return null;
-        break;
-      case NoteLoc.Inside:
-        if (base !== basename(parent)) return null;
-        break;
-      case NoteLoc.Outside:
-        break;
-      default:
-        assertNever(this.settings.folderNotePref);
-    }
-    const path = this.getFolderPath(note);
-    if (path)
-      return (this.vault.getAbstractFileByPath(path) as TFolder) ?? null;
-    else return null;
   };
 
   // Get Folder Note from Folder
-  getFolderNote: API["getFolderNote"] = (
-    ...args: [oldPath: string, folder: TFolder] | [folder: TFolder]
-  ) => {
-    const result = this.getFolderNotePath(...args).info;
-    return this.findFolderNote(...result);
-  };
+  getFolderNote: API["getFolderNote"] = (folder) =>
+    this.findFolderNote(this.getFolderNotePath(folder));
+  findFolderNote = (info: FolderNotePath): TFile | null => {
+    if (!info) return null;
 
-  findFolderNote = (findIn: string, noteBaseName: string): TFile | null => {
-    const findInFolder = this.vault.getAbstractFileByPath(findIn);
-    if (findInFolder && findInFolder instanceof TFolder) {
-      const found = findInFolder.children.find(
-        (af) =>
-          af instanceof TFile &&
-          af.basename === noteBaseName &&
-          af.extension === "md",
-      );
-      return (found as TFile) ?? null;
-    } else return null;
+    const note = this.vault.getAbstractFileByPath(info.path);
+    if (note && note instanceof TFile) return note;
+    else return null;
   };
+  getFolderNotePath: API["getFolderNotePath"] = (folder) => {
+    const dirPath = typeof folder === "string" ? folder : folder.path;
+    if (extname(dirPath) !== "")
+      throw new TypeError("given path contains extension");
 
-  getFolderNotePath = (
-    ...args: [oldPath: string, folder: TFolder] | [folder: TFolder]
-  ): folderNotePath => {
-    const [src, baseFolder] = args;
-    const getParent = (): string => {
-      if (typeof src === "string") {
-        return getParentPath(src);
-      } else {
-        if (src.parent === undefined) {
-          // root folder
-          return src.path;
-        } else if (src.parent === null) {
-          // when the folder is a deleted one
-          return getParentPath(src.path);
-        } else return src.parent.path;
-      }
-    };
+    const parent = getParentPath(dirPath);
+    if (!parent) {
+      console.info("no folder note for root dir");
+      return null;
+    }
+
     const { indexName, folderNotePref: folderNoteLoc } = this.settings;
-    let findIn: string, noteBaseName: string;
 
+    let dir: string, basename: string;
     switch (folderNoteLoc) {
       case NoteLoc.Index:
-        noteBaseName = indexName;
+        basename = indexName;
+        dir = dirPath;
         break;
       case NoteLoc.Inside:
+        basename = parse(dirPath).name;
+        dir = dirPath;
       case NoteLoc.Outside:
-        if (typeof src === "string") noteBaseName = parse(src).name;
-        else noteBaseName = src.name === "/" ? this.vault.getName() : src.name;
+        basename = parse(dirPath).name;
+        dir = parent;
         break;
       default:
         assertNever(folderNoteLoc);
     }
-    switch (folderNoteLoc) {
-      case NoteLoc.Index:
-      case NoteLoc.Inside:
-        if (typeof src === "string") {
-          if (!baseFolder) throw new TypeError("baseFolder not provided");
-          findIn = baseFolder.path;
-        } else findIn = src.path;
-        break;
-      case NoteLoc.Outside:
-        findIn = getParent();
-        break;
-      default:
-        assertNever(folderNoteLoc);
-    }
+
     return {
-      info: [findIn, noteBaseName],
-      path: join(findIn, noteBaseName + ".md"),
+      dir,
+      name: basename + ".md",
+      path: join(dir, basename + ".md"),
     };
   };
 
@@ -186,12 +150,15 @@ export default class NoteFinder {
   ): boolean => {
     if (!isMd(file)) return false;
 
-    const shouldRun = file.parent && !this.getFolderNote(file.parent);
-    if (shouldRun && !dryrun) {
-      const { path } = this.getFolderNotePath(file.parent);
-      this.vault.rename(file, path);
-    }
-    return shouldRun;
+    if (file.parent) {
+      const fnPath = this.getFolderNotePath(file.parent),
+        shouldRun = fnPath && !this.getFolderNote(file.parent);
+      if (shouldRun && !dryrun) {
+        const { path } = fnPath;
+        this.vault.rename(file, path);
+      }
+      return !!shouldRun;
+    } else return false;
   };
   /**
    * @returns return false if file not folder note
@@ -219,9 +186,11 @@ export default class NoteFinder {
     if (!isMd(file)) return false;
 
     const newFolderPath = this.getFolderPath(file, true),
-      folderExist = await this.vault.exists(newFolderPath);
+      folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
     if (folderExist) {
       new Notice("Folder already exists");
+    } else if (!newFolderPath) {
+      console.info("no vaild linked folder path for file %s", file.path);
     } else if (!dryrun) {
       await this.vault.createFolder(newFolderPath);
       let newNotePath: string | null;
@@ -240,7 +209,7 @@ export default class NoteFinder {
       }
       if (newNotePath) this.vault.rename(file, newNotePath);
     }
-    return folderExist;
+    return !!folderExist;
   };
 
   // Folder Operations
@@ -252,8 +221,7 @@ export default class NoteFinder {
     folder: TFolder,
     dryrun = false,
   ): boolean => {
-    const { info } = this.getFolderNotePath(folder);
-    const noteResult = this.findFolderNote(...info);
+    const noteResult = this.getFolderNote(folder);
     if (noteResult && !dryrun) this.vault.delete(noteResult);
 
     return !!noteResult;
@@ -265,12 +233,16 @@ export default class NoteFinder {
     folder: TFolder,
     dryrun = false,
   ): boolean => {
-    const { info, path } = this.getFolderNotePath(folder);
-    const noteResult = this.findFolderNote(...info);
-    if (!noteResult && !dryrun) {
-      this.vault.create(path, this.plugin.getNewFolderNote(folder));
+    let shouldRun, fnPath;
+    if (
+      (shouldRun =
+        !this.getFolderNote(folder) &&
+        (fnPath = this.getFolderNotePath(folder))) &&
+      !dryrun
+    ) {
+      this.vault.create(fnPath.path, this.plugin.getNewFolderNote(folder));
     }
-    return !noteResult;
+    return !!shouldRun;
   };
 }
 
