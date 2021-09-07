@@ -82,6 +82,7 @@ export default class FNCore extends Plugin {
         return finder.CreateFolderNote;
       },
     };
+    this.trigger("folder-note:api-ready", this.api);
   }
 
   async onload() {

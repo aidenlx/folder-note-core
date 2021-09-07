@@ -78,6 +78,7 @@ type OnArgs<T> = T extends [infer A, ...infer B]
   : never;
 
 export type FNCEvents =
+  | [name: "folder-note:api-ready", api: FolderNoteAPI]
   | [name: "folder-note:cfg-changed"]
   | [name: "folder-note:delete", note: TFile, folder: TFolder]
   | [
