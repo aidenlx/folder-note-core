@@ -5,7 +5,7 @@ import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteFinder from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
-import API from "./typings/api";
+import API, { FNCEvents } from "./typings/api";
 
 const ALX_FOLDER_NOTE = "alx-folder-note";
 export default class FNCore extends Plugin {
@@ -97,15 +97,8 @@ export default class FNCore extends Plugin {
     this.vaultHandler.registerEvent();
   }
 
-  trigger(name: "folder-note:create", note: TFile, folder: TFolder): void;
-  trigger(
-    name: "folder-note:rename",
-    note: [file: TFile, oldPath: string],
-    folder: [folder: TFolder, oldPath: string],
-  ): void;
-  trigger(name: "folder-note:delete", note: TFile, folder: TFolder): void;
-  trigger(name: "folder-note:cfg-changed"): void;
-  trigger(name: string, ...data: any[]): void {
+  trigger(...args: FNCEvents): void {
+    const [name, ...data] = args;
     this.app.vault.trigger(name, ...data);
   }
 

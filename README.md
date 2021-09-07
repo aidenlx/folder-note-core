@@ -1,6 +1,6 @@
 # Folder Note Core
 
-Provide core features and API for folder notes.
+Provide core features and API for [folder notes](https://github.com/aidenlx/alx-folder-note).
 
 - [create folder note](https://github.com/aidenlx/alx-folder-note/wiki/create-folder-note) easily, with [mulitple preferences](https://github.com/aidenlx/alx-folder-note/wiki/folder-note-pref) and [template support](https://github.com/aidenlx/alx-folder-note/wiki/core-settings#template)
 - folder and folder note working as one
@@ -21,49 +21,11 @@ For advanced feature such as file explorer patches and folder overviews, install
 ### For developers
 
 1. run `npm i -D @aidenlx/folder-note-core` in your plugin dir
-2. create a new file named `types.d.ts` under the same dir as `main.ts`
-3. copy the following code into new file, then you can
+2. import the api (add `import {} from "@aidenlx/folder-note-core"`)
+3. use api
    1. check if enabled: `plugin.app.enabledPlugins.has("folder-note-core")`
    2. access api: `plugin.app.plugins.["folder-note-core"]?.api`
    3. bind to dataview events: `plugin.registerEvent(plugin.app.vault.on("folder-note:...",(...)=>{...}))`
-
-```ts
-import "obsidian";
-
-import FolderNoteAPI from "@aidenlx/folder-note-core";
-
-declare module "obsidian" {
-  interface Vault {
-    on(
-      name: "folder-note:create",
-      callback: (note: TFile, folder: TFolder) => any,
-    ): EventRef;
-    on(
-      name: "folder-note:rename",
-      callback: (
-        note: [file: TFile, oldPath: string],
-        folder: [folder: TFolder, oldPath: string],
-      ) => any,
-    ): EventRef;
-    on(
-      name: "folder-note:delete",
-      callback: (note: TFile, folder: TFolder) => any,
-    ): EventRef;
-    on(name: "folder-note:cfg-changed", callback: () => any): EventRef;
-  }
-  interface App {
-    plugins: {
-      enabledPlugins: Set<string>;
-      plugins: {
-        [id: string]: any;
-        ["folder-note-core"]?: {
-          api: FolderNoteAPI;
-        };
-      };
-    };
-  }
-}
-```
 
 ## Compatibility
 

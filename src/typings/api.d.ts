@@ -37,6 +37,9 @@ export default interface FolderNoteAPI {
    * @returns not guaranteed to exists  */
   getFolderNotePath(folder: TFolder | string): FolderNotePath;
 
+  /** Generate folder note content for given folder based on template */
+  getNewFolderNote(folder: TFolder): string;
+
   /**
    * @returns return false if no linked folder found
    */
@@ -68,8 +71,25 @@ export default interface FolderNoteAPI {
 
 import "obsidian";
 
+type OnArgs<T> = T extends [infer A, ...infer B]
+  ? A extends string
+    ? [name: A, callback: (...args: B) => any]
+    : never
+  : never;
+
+export type FNCEvents =
+  | [name: "folder-note:cfg-changed"]
+  | [name: "folder-note:delete", note: TFile, folder: TFolder]
+  | [
+      name: "folder-note:rename",
+      note: [file: TFile, oldPath: string],
+      folder: [folder: TFolder, oldPath: string],
+    ]
+  | [name: "folder-note:create", note: TFile, folder: TFolder];
+type EventsOnArgs = OnArgs<FNCEvents>;
+
 declare module "obsidian" {
   interface Vault {
-    exists(normalizedPath: string, sensitive?: boolean): Promise<boolean>;
+    on(...args: EventsOnArgs): EventRef;
   }
 }
