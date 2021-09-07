@@ -35,7 +35,7 @@ export default class NoteFinder {
    */
   getFolderPath: API["getFolderPath"] = (note, newFolder = false) => {
     if (!isMd(note)) {
-      console.info("given file not markdown");
+      console.info("getFolderPath(%o): given file not markdown", note);
       return null;
     }
     let parent: string | null, base: string;
@@ -55,23 +55,31 @@ export default class NoteFinder {
         if (newFolder) return getSiblingFolder();
         else if (parent && base === this.settings.indexName) return parent;
         else {
-          if (!parent) console.info("no folder note for root dir");
-          else console.info("note name invaild");
+          if (!parent)
+            console.info(
+              "getFolderPath(%o): no folder note for root dir",
+              note,
+            );
+          else console.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Inside:
         if (newFolder) return getSiblingFolder();
         else if (parent && base === basename(parent)) return parent;
         else {
-          if (!parent) console.info("no folder note for root dir");
-          else console.info("note name invaild");
+          if (!parent)
+            console.info(
+              "getFolderPath(%o): no folder note for root dir",
+              note,
+            );
+          else console.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Outside: {
         const dir = getSiblingFolder();
         if (newFolder || base === basename(dir)) return dir;
         else {
-          console.info("note name invaild");
+          console.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       }
@@ -97,7 +105,10 @@ export default class NoteFinder {
 
     const parent = getParentPath(dirPath);
     if (!parent) {
-      console.info("no folder note for root dir");
+      console.info(
+        "getFolderNotePath(%o): no folder note for root dir",
+        folder,
+      );
       return null;
     }
 
@@ -190,7 +201,11 @@ export default class NoteFinder {
     if (folderExist) {
       new Notice("Folder already exists");
     } else if (!newFolderPath) {
-      console.info("no vaild linked folder path for file %s", file.path);
+      console.info(
+        "createFolderForNote(%o): no vaild linked folder path for %s",
+        file,
+        file.path,
+      );
     } else if (!dryrun) {
       await this.vault.createFolder(newFolderPath);
       let newNotePath: string | null;
