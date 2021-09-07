@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/aidenlx/folder-note-core/compare/1.0.1...1.0.2) (2021-09-07)
+
+
+### Bug Fixes
+
+* **resolver:** remove notice on dryrun for createFolderForNote ([f2f2ddf](https://github.com/aidenlx/folder-note-core/commit/f2f2ddf1941798160a6deec16ffe3ca8cc516d6a))
+
 ## [1.0.1](https://github.com/aidenlx/folder-note-core/compare/1.0.0...1.0.1) (2021-09-07)
 
 
