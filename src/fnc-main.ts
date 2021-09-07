@@ -5,9 +5,11 @@ import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteFinder from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
-import API, { FNCEvents } from "./typings/api";
+import API, { API_NAME, FNCEvents } from "./typings/api";
 
 const ALX_FOLDER_NOTE = "alx-folder-note";
+const API_NAME: API_NAME extends keyof typeof window ? API_NAME : never =
+  "FolderNoteAPIv0" as const; // this line will throw error if name out of sync
 export default class FNCore extends Plugin {
   settings: FNCoreSettings = DEFAULT_SETTINGS;
   vaultHandler = new VaultHandler(this);
@@ -82,6 +84,8 @@ export default class FNCore extends Plugin {
         return finder.CreateFolderNote;
       },
     };
+    (window[API_NAME] = this.api) &&
+      this.register(() => (window[API_NAME] = undefined));
     this.trigger("folder-note:api-ready", this.api);
   }
 

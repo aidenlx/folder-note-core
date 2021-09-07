@@ -69,13 +69,11 @@ export default interface FolderNoteAPI {
   CreateFolderNote(folder: TFolder, dryrun?: boolean): boolean;
 }
 
-import "obsidian";
-
-type OnArgs<T> = T extends [infer A, ...infer B]
-  ? A extends string
-    ? [name: A, callback: (...args: B) => any]
-    : never
-  : never;
+declare global {
+  // Must use var, no const/let
+  var FolderNoteAPIv0: FolderNoteAPI | undefined;
+}
+export type API_NAME = "FolderNoteAPIv0";
 
 export type FNCEvents =
   | [name: "folder-note:api-ready", api: FolderNoteAPI]
@@ -87,10 +85,3 @@ export type FNCEvents =
       folder: [folder: TFolder, oldPath: string],
     ]
   | [name: "folder-note:create", note: TFile, folder: TFolder];
-type EventsOnArgs = OnArgs<FNCEvents>;
-
-declare module "obsidian" {
-  interface Vault {
-    on(...args: EventsOnArgs): EventRef;
-  }
-}
