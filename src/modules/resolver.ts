@@ -171,16 +171,23 @@ export default class NoteFinder {
    * @returns return false if file not folder note
    */
   DeleteNoteAndLinkedFolder: API["DeleteNoteAndLinkedFolder"] = (
-    file: TFile,
+    target,
     dryrun = false,
-  ): boolean => {
-    if (!isMd(file)) return false;
-
-    const folderResult = this.getFolderFromNote(file);
-    if (folderResult && !dryrun) {
-      new DeleteWarning(this.plugin, file, folderResult).open();
+  ) => {
+    let file: null | TFile, folder: null | TFolder;
+    if (target instanceof TFile) {
+      if (!isMd(target)) return false;
+      file = target;
+      folder = this.getFolderFromNote(target);
+    } else {
+      file = this.getFolderNote(target);
+      folder = target;
     }
-    return !!folderResult;
+
+    if (file && folder && !dryrun) {
+      new DeleteWarning(this.plugin, file, folder).open();
+    }
+    return !!(file && folder);
   };
 
   /**

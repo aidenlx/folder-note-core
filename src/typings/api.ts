@@ -53,7 +53,7 @@ export default interface FolderNoteAPI {
    * Delete given file as well as linked folder, will prompt for confirmation
    * @returns return false if no linked folder found
    */
-  DeleteNoteAndLinkedFolder(file: TFile, dryrun?: boolean): boolean;
+  DeleteNoteAndLinkedFolder(target: TFile | TFolder, dryrun?: boolean): boolean;
   /**
    * Create folder based on config and move given file if needed
    * @returns return false if folder already exists

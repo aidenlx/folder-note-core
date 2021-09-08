@@ -1,6 +1,7 @@
 import { MarkdownView, Menu, TFile, TFolder } from "obsidian";
 
 import FNCore from "../fnc-main";
+import { NoteLoc } from "../misc";
 
 /** Add Make doc folder note and delete linked folder command */
 export const AddOptionsForNote = (plugin: FNCore) => {
@@ -94,16 +95,29 @@ export const AddOptionsForNote = (plugin: FNCore) => {
 };
 
 export const AddOptionsForFolder = (plugin: FNCore) => {
-  const { DeleteFolderNote, CreateFolderNote } = plugin.finder;
+  const { DeleteFolderNote, CreateFolderNote, DeleteNoteAndLinkedFolder } =
+    plugin.finder;
   plugin.registerEvent(
     plugin.app.workspace.on("file-menu", (menu, af, source) => {
       if (af instanceof TFolder) {
-        if (DeleteFolderNote(af, true))
+        if (DeleteFolderNote(af, true)) {
           menu.addItem((item) =>
             item
               .setIcon("trash")
               .setTitle("Delete Folder Note")
               .onClick(() => DeleteFolderNote(af)),
+          );
+        }
+        if (
+          plugin.settings.folderNotePref === NoteLoc.Outside &&
+          plugin.settings.deleteOutsideNoteWithFolder === false &&
+          DeleteNoteAndLinkedFolder(af, true)
+        )
+          menu.addItem((item) =>
+            item
+              .setIcon("trash")
+              .setTitle("Delete Folder and Folder Note")
+              .onClick(() => DeleteNoteAndLinkedFolder(af)),
           );
         if (CreateFolderNote(af, true))
           menu.addItem((item) =>

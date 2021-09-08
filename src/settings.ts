@@ -13,7 +13,7 @@ export interface FNCoreSettings {
 
 export const DEFAULT_SETTINGS: FNCoreSettings = {
   folderNotePref: NoteLoc.Inside,
-  deleteOutsideNoteWithFolder: true,
+  deleteOutsideNoteWithFolder: false,
   indexName: "_about_",
   autoRename: true,
   folderNoteTemplate: "# {{FOLDER_NAME}}",
@@ -44,7 +44,15 @@ export class FNCoreSettingTab extends PluginSettingTab {
   setDeleteWithFolder = (containerEl: HTMLElement) => {
     new Setting(containerEl)
       .setName("Delete Outside Note with Folder")
-      .setDesc("Delete folder note outside when folder is deleted")
+      .setDesc(
+        createFragment((el) => {
+          el.appendText("Delete folder note outside when folder is deleted");
+          el.createDiv({
+            text: "Warning: The note will be deleted when the folder is moved outside of vault",
+            cls: "mod-warning",
+          });
+        }),
+      )
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.deleteOutsideNoteWithFolder)
