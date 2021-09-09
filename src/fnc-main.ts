@@ -1,4 +1,6 @@
-import { App, Plugin, PluginManifest, TFile, TFolder } from "obsidian";
+import assertNever from "assert-never";
+import { around } from "monkey-around";
+import { App, Plugin, PluginManifest } from "obsidian";
 
 import { NoteLoc } from "./misc";
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
@@ -22,7 +24,7 @@ export default class FNCore extends Plugin {
     super(app, manifest);
     let finder = new NoteFinder(this);
     this.finder = finder;
-    let plugin = this;
+    const plugin = this;
     this.api = {
       get renderCoreSettings() {
         return plugin.settingTab.renderCoreSettings;
@@ -87,6 +89,32 @@ export default class FNCore extends Plugin {
     (window[API_NAME] = this.api) &&
       this.register(() => (window[API_NAME] = undefined));
     this.trigger("folder-note:api-ready", this.api);
+    this.register(
+      around(app.fileManager, {
+        // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+        getNewFileParent(next) {
+          // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+          return function (sourcePath) {
+            if (app.vault.getConfig("newFileLocation") === "current") {
+              const pref = plugin.settings.folderNotePref;
+              switch (pref) {
+                case NoteLoc.Index:
+                case NoteLoc.Inside:
+                  break;
+                case NoteLoc.Outside: {
+                  const folder = plugin.finder.getFolderFromNote(sourcePath);
+                  if (folder) return folder;
+                  break;
+                }
+                default:
+                  assertNever(pref);
+              }
+            }
+            return next.call(app.fileManager, sourcePath);
+          };
+        },
+      }),
+    );
   }
 
   async onload() {
