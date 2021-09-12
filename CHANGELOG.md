@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/aidenlx/folder-note-core/compare/1.2.1...1.2.2) (2021-09-12)
+
+
+### Features
+
+* **settings:** add option to set log level; expose renderLogLevel in api ([d284dd6](https://github.com/aidenlx/folder-note-core/commit/d284dd6cb8aa6536fa18748a2793c8783c27a8f5))
+
 ## [1.2.1](https://github.com/aidenlx/folder-note-core/compare/1.2.0...1.2.1) (2021-09-12)
 
 
