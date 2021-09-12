@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/aidenlx/folder-note-core/compare/1.2.0...1.2.1) (2021-09-12)
+
+
+### Bug Fixes
+
+* update mobile flag ([84855ae](https://github.com/aidenlx/folder-note-core/commit/84855aed8e698b126c33d65e3ba48010d3e53839))
+
 # [1.2.0](https://github.com/aidenlx/folder-note-core/compare/1.1.0...1.2.0) (2021-09-12)
 
 
