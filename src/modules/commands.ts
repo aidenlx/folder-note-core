@@ -1,7 +1,7 @@
 import { MarkdownView, Menu, TFile, TFolder } from "obsidian";
 
 import FNCore from "../fnc-main";
-import { NoteLoc } from "../misc";
+import { NoteLoc } from "../typings/api";
 
 /** Add Make doc folder note and delete linked folder command */
 export const AddOptionsForNote = (plugin: FNCore) => {

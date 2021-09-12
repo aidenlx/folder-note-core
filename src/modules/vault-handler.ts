@@ -9,7 +9,8 @@ import {
 import { basename, dirname } from "path";
 
 import FNCore from "../fnc-main";
-import { afOp, getRenamedPath, isMd, NoteLoc } from "../misc";
+import { afOp, getRenamedPath, isMd } from "../misc";
+import { NoteLoc } from "../typings/api";
 
 export default class VaultHandler {
   // @ts-ignore

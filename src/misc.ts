@@ -4,12 +4,6 @@ import { dirname, extname, join } from "path";
 export const isMd = (file: TFile | string) =>
   typeof file === "string" ? extname(file) === ".md" : file.extension === "md";
 
-export enum NoteLoc {
-  Index,
-  Inside,
-  Outside,
-}
-
 /**
  * @param newName include extension
  * @returns null if given root dir

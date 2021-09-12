@@ -2,8 +2,8 @@ import "obsidian";
 
 import { Plugin } from "obsidian";
 
-import FolderNoteAPI, { FNCEvents } from "./typings/api";
-export { FNCEvents, FolderNoteAPI };
+import FolderNoteAPI, { FNCEvents, NoteLoc } from "./typings/api";
+export { FNCEvents, FolderNoteAPI, NoteLoc };
 
 // EVENTS
 

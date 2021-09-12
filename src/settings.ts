@@ -1,7 +1,18 @@
-import { debounce, PluginSettingTab, Setting } from "obsidian";
+import {
+  ButtonComponent,
+  debounce,
+  DropdownComponent,
+  Modal,
+  Notice,
+  PluginSettingTab,
+  Setting,
+  TextAreaComponent,
+  TFile,
+  TFolder,
+} from "obsidian";
 
 import FNCore from "./fnc-main";
-import { NoteLoc } from "./misc";
+import { FolderNotePath, NoteLoc } from "./typings/api";
 
 export interface FNCoreSettings {
   folderNotePref: NoteLoc;
@@ -19,6 +30,12 @@ export const DEFAULT_SETTINGS: FNCoreSettings = {
   folderNoteTemplate: "# {{FOLDER_NAME}}",
 };
 
+const LocDescMap: Record<NoteLoc, string> = {
+  [NoteLoc.Index]: "Inside Folder, Index File",
+  [NoteLoc.Inside]: "Inside Folder, With Same Name",
+  [NoteLoc.Outside]: "Outside Folder, With Same Name",
+};
+
 export class FNCoreSettingTab extends PluginSettingTab {
   constructor(public plugin: FNCore) {
     super(plugin.app, plugin);
@@ -31,7 +48,7 @@ export class FNCoreSettingTab extends PluginSettingTab {
   }
 
   renderCoreSettings = (target: HTMLElement) => {
-    this.setNoteLoc(target);
+    this.setStrategy(target);
     if (this.plugin.settings.folderNotePref === NoteLoc.Index)
       this.setIndexName(target);
     else if (this.plugin.settings.folderNotePref === NoteLoc.Outside)
@@ -62,13 +79,13 @@ export class FNCoreSettingTab extends PluginSettingTab {
           }),
       );
   };
-  setNoteLoc = (containerEl: HTMLElement) => {
+  setStrategy = (containerEl: HTMLElement) => {
     new Setting(containerEl)
-      .setName("Preference for Note File Location")
+      .setName("Note File Storage Strategy")
       .setDesc(
         createFragment((el) => {
           el.appendText(
-            "Select how you would like the folder note to be placed",
+            "Select how you would like the folder note to be stored",
           );
           el.createEl("br");
           el.createEl("a", {
@@ -81,22 +98,35 @@ export class FNCoreSettingTab extends PluginSettingTab {
         }),
       )
       .addDropdown((dropDown) => {
-        const options: Record<NoteLoc, string> = {
-          [NoteLoc.Index]: "Inside Folder, Index File",
-          [NoteLoc.Inside]: "Inside Folder, With Same Name",
-          [NoteLoc.Outside]: "Outside Folder, With Same Name",
-        };
-
         dropDown
-          .addOptions(options)
+          .addOptions(LocDescMap)
           .setValue(this.plugin.settings.folderNotePref.toString())
           .onChange(async (value: string) => {
             this.plugin.settings.folderNotePref = +value;
             this.plugin.trigger("folder-note:cfg-changed");
             await this.plugin.saveSettings();
-            this.display();
           });
       });
+    new Setting(containerEl)
+      .setName("Switch Strategy")
+      .setDesc(
+        createFragment((el) => {
+          el.appendText(
+            "Batch convert existing folder notes to use new storage strategy",
+          );
+          el.createDiv({
+            text: "Warning: This function is experimental and dangerous, make sure to fully backup the vault before the conversion",
+            cls: "mod-warning",
+          });
+        }),
+      )
+      .addButton((cb) =>
+        cb
+          .setTooltip("Open Dialog")
+          .setIcon("popup-open")
+          .setCta()
+          .onClick(() => new SwitchStrategyDialog(this.plugin).open()),
+      );
   };
   setIndexName = (containerEl: HTMLElement) => {
     new Setting(containerEl)
@@ -149,4 +179,120 @@ export class FNCoreSettingTab extends PluginSettingTab {
         });
       });
   };
+}
+
+class SwitchStrategyDialog extends Modal {
+  buttonContainerEl: HTMLDivElement;
+  outputEl: TextAreaComponent;
+  fromOptsEl: DropdownComponent;
+  toOptsEl: DropdownComponent;
+
+  constructor(public plugin: FNCore) {
+    super(plugin.app);
+
+    // Dropdowns
+    this.fromOptsEl = new DropdownComponent(
+      this.titleEl.createDiv({ text: "From:  " }),
+    ).addOptions(LocDescMap);
+    this.toOptsEl = new DropdownComponent(
+      this.titleEl.createDiv({ text: "To:  " }),
+    ).addOptions(LocDescMap);
+
+    // Console output
+    this.outputEl = new TextAreaComponent(this.contentEl)
+      .setValue("Hello world")
+      .setDisabled(true)
+      .then((cb) => {
+        cb.inputEl.style.width = "100%";
+        cb.inputEl.rows = 10;
+      });
+
+    // Buttons
+    this.buttonContainerEl = this.modalEl.createDiv({
+      cls: "modal-button-container",
+    });
+    this.addButton((cb) =>
+      cb.setButtonText("Check Conflicts").onClick(() => this.Convert(true)),
+    );
+    this.addButton((cb) =>
+      cb
+        .setButtonText("Convert")
+        .setWarning()
+        .onClick(() => this.Convert()),
+    );
+    this.addButton((cb) =>
+      cb.setButtonText("Cancel").onClick(this.close.bind(this)),
+    );
+  }
+
+  private addButton(cb: (component: ButtonComponent) => any): ButtonComponent {
+    const button = new ButtonComponent(this.buttonContainerEl);
+    cb(button);
+    return button;
+  }
+  private log(message: string) {
+    this.outputEl.setValue(this.outputEl.getValue() + "\n" + message);
+  }
+  private clear() {
+    this.outputEl.setValue("");
+  }
+
+  Convert = async (dryrun = false): Promise<void> => {
+    const { From, To } = this;
+    this.clear();
+    if (From === null || To === null) {
+      new Notice("Please select the strategies to convert from/to first");
+    } else if (From === To) {
+      new Notice("Convert between same strategy, skipping...");
+    } else {
+      const { getFolderNote, getFolderNotePath } = this.plugin.finder;
+      const folderNotes = this.app.vault
+        .getAllLoadedFiles()
+        .filter((af): af is TFolder => af instanceof TFolder && !af.isRoot())
+        .map((folder): [note: TFile, newPath: FolderNotePath] | null => {
+          const note = getFolderNote(folder, From),
+            newPath = note ? getFolderNotePath(folder, To) : null;
+          if (note && newPath) {
+            return [note, newPath];
+          } else {
+            return null;
+          }
+        });
+      let isConflict = false;
+      for (const iterator of folderNotes) {
+        if (!iterator) continue;
+        const [src, newPath] = iterator;
+        if (await this.app.vault.exists(newPath.path)) {
+          isConflict || (isConflict = true);
+          this.log(
+            `Unable to move file ${src.path}: file exist in ${newPath.path}`,
+          );
+        } else if (!dryrun) {
+          this.app.fileManager.renameFile(src, newPath.path);
+        }
+      }
+      if (!isConflict) {
+        if (dryrun) this.log("Check complete, no conflict found");
+        else this.log("Batch convert complete");
+      }
+    }
+  };
+
+  get From() {
+    const val = this.fromOptsEl.getValue();
+    if (val && NoteLoc[+val]) return +val as NoteLoc;
+    else return null;
+  }
+  get To() {
+    const val = this.toOptsEl.getValue();
+    if (val && NoteLoc[+val]) return +val as NoteLoc;
+    else return null;
+  }
+
+  onOpen() {
+    this.clear();
+    const pref = this.plugin.settings.folderNotePref.toString();
+    this.fromOptsEl.setValue(pref);
+    this.toOptsEl.setValue(pref);
+  }
 }

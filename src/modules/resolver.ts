@@ -3,8 +3,8 @@ import { Modal, Notice, TFile, TFolder } from "obsidian";
 import { basename, extname, join, parse } from "path";
 
 import FNCore from "../fnc-main";
-import { getParentPath, isMd, NoteLoc } from "../misc";
-import API, { FolderNotePath } from "../typings/api";
+import { getParentPath, isMd } from "../misc";
+import API, { FolderNotePath, NoteLoc } from "../typings/api";
 
 export default class NoteFinder {
   plugin: FNCore;
@@ -19,9 +19,9 @@ export default class NoteFinder {
     return this.plugin.app.vault;
   }
 
-  getFolderFromNote: API["getFolderFromNote"] = (note) => {
+  getFolderFromNote: API["getFolderFromNote"] = (note, strategy) => {
     if (!isMd(note)) return null;
-    const folderPath = this.getFolderPath(note, false);
+    const folderPath = this.getFolderPath(note, false, strategy);
     if (!folderPath) return null;
     const folder = this.vault.getAbstractFileByPath(folderPath);
     if (folder && folder instanceof TFolder) return folder;
@@ -33,7 +33,12 @@ export default class NoteFinder {
    * @param newFolder if the path is used to create new folder
    * @returns folder path, will return null if note basename invaild and newFolder=false
    */
-  getFolderPath: API["getFolderPath"] = (note, newFolder = false) => {
+  getFolderPath: API["getFolderPath"] = (
+    note,
+    newFolder = false,
+    strategy?: NoteLoc,
+  ) => {
+    if (strategy === undefined) strategy = this.settings.folderNotePref;
     if (!isMd(note)) {
       console.info("getFolderPath(%o): given file not markdown", note);
       return null;
@@ -56,7 +61,7 @@ export default class NoteFinder {
       if (parent === "/") return base;
       else return join(parent, base);
     };
-    switch (this.settings.folderNotePref) {
+    switch (strategy) {
       case NoteLoc.Index:
         if (newFolder) return getSiblingFolder();
         else if (base === this.settings.indexName) return parent;
@@ -80,13 +85,13 @@ export default class NoteFinder {
         }
       }
       default:
-        assertNever(this.settings.folderNotePref);
+        assertNever(strategy);
     }
   };
 
   // Get Folder Note from Folder
-  getFolderNote: API["getFolderNote"] = (folder) =>
-    this.findFolderNote(this.getFolderNotePath(folder));
+  getFolderNote: API["getFolderNote"] = (folder, strategy) =>
+    this.findFolderNote(this.getFolderNotePath(folder, strategy));
   findFolderNote = (info: FolderNotePath | null): TFile | null => {
     if (!info) return null;
 
@@ -94,7 +99,9 @@ export default class NoteFinder {
     if (note && note instanceof TFile) return note;
     else return null;
   };
-  getFolderNotePath: API["getFolderNotePath"] = (folder) => {
+  getFolderNotePath: API["getFolderNotePath"] = (folder, strategy) => {
+    if (strategy === undefined) strategy = this.settings.folderNotePref;
+
     if (typeof folder === "string" && extname(folder) !== "") {
       console.error(
         "getFolderNotePath(%o): given path contains extension",
@@ -109,10 +116,10 @@ export default class NoteFinder {
       return null;
     }
 
-    const { indexName, folderNotePref: folderNoteLoc } = this.settings;
+    const { indexName } = this.settings;
 
     let dir: string, basename: string;
-    switch (folderNoteLoc) {
+    switch (strategy) {
       case NoteLoc.Index:
         basename = indexName;
         dir = dirPath;
@@ -120,12 +127,13 @@ export default class NoteFinder {
       case NoteLoc.Inside:
         basename = parse(dirPath).name;
         dir = dirPath;
+        break;
       case NoteLoc.Outside:
         basename = parse(dirPath).name;
         dir = parent;
         break;
       default:
-        assertNever(folderNoteLoc);
+        assertNever(strategy);
     }
 
     return {

@@ -2,12 +2,11 @@ import assertNever from "assert-never";
 import { around } from "monkey-around";
 import { App, Plugin, PluginManifest } from "obsidian";
 
-import { NoteLoc } from "./misc";
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteFinder from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
-import API, { API_NAME, FNCEvents } from "./typings/api";
+import API, { API_NAME, FNCEvents, NoteLoc } from "./typings/api";
 
 const ALX_FOLDER_NOTE = "alx-folder-note";
 const API_NAME: API_NAME extends keyof typeof window ? API_NAME : never =

@@ -11,6 +11,12 @@ interface OldConfig {
   folderNoteTemplate: string;
 }
 
+export enum NoteLoc {
+  Index,
+  Inside,
+  Outside,
+}
+
 export type FolderNotePath = {
   /** the parent directory */
   dir: string;
@@ -23,19 +29,26 @@ export default interface FolderNoteAPI {
   importSettings(settings: Partial<OldConfig>): void;
   renderCoreSettings(target: HTMLElement): void;
 
-  getFolderFromNote(note: TFile | string): TFolder | null;
+  getFolderFromNote(note: TFile | string, strategy?: NoteLoc): TFolder | null;
   /**
    * Get path of given note/notePath's folder based on setting
    * @param note notePath or note TFile
    * @param newFolder if the path is used to create new folder
    * @returns folder path, will return null if note basename invaild and newFolder=false
    */
-  getFolderPath(note: TFile | string, newFolder: boolean): string | null;
+  getFolderPath(
+    note: TFile | string,
+    newFolder: boolean,
+    strategy?: NoteLoc,
+  ): string | null;
 
-  getFolderNote(folder: TFolder | string): TFile | null;
+  getFolderNote(folder: TFolder | string, strategy?: NoteLoc): TFile | null;
   /** Get the path to the folder note for given file based on setting,
    * @returns not guaranteed to exists  */
-  getFolderNotePath(folder: TFolder | string): FolderNotePath | null;
+  getFolderNotePath(
+    folder: TFolder | string,
+    strategy?: NoteLoc,
+  ): FolderNotePath | null;
 
   /** Generate folder note content for given folder based on template */
   getNewFolderNote(folder: TFolder): string;
