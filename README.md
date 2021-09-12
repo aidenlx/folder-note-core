@@ -21,11 +21,12 @@ For advanced feature such as file explorer patches and folder overviews, install
 ### For developers
 
 1. run `npm i -D @aidenlx/folder-note-core` in your plugin dir
-2. import the api (add `import {} from "@aidenlx/folder-note-core"`)
+2. import the api (add `import { getApi, isPluginEnabled, registerApi } from "@aidenlx/folder-note-core"`)
 3. use api
-   1. check if enabled: `plugin.app.enabledPlugins.has("folder-note-core")`
-   2. access api: `plugin.app.plugins.["folder-note-core"]?.api`
-   3. bind to dataview events: `plugin.registerEvent(plugin.app.vault.on("folder-note:...",(...)=>{...}))`
+   1. check if enabled: `isPluginEnabled(YourPluginInstance)`
+   2. access api: `getApi()` / `getApi(YourPluginInstance)`
+   3. use api when it's ready: `registerApi(YourPluginInstance, (api)=>{// do something })`
+   4. bind to events: `YourPluginInstance.registerEvent(YourPluginInstance.app.vault.on("folder-note:...",(...)=>{...}))`
 
 ## Compatibility
 
