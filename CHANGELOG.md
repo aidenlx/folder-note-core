@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/aidenlx/folder-note-core/compare/1.0.2...1.1.0) (2021-09-12)
+
+
+### Bug Fixes
+
+* **resolver:** getFolderNotePath no longer throw uncaught error when given path contains extension ([f86a0a5](https://github.com/aidenlx/folder-note-core/commit/f86a0a501cf07b5a5b9b4fa851624127148a7585))
+
+
+### Features
+
+* add file menu option to delete note with folder for linked folder ([4d86d46](https://github.com/aidenlx/folder-note-core/commit/4d86d467602676044b1895ad13f6ffb3f4620423))
+* new note created in folder note is placed in linked folder properly ([02fa8bf](https://github.com/aidenlx/folder-note-core/commit/02fa8bff5eb54e932319d06bfc8db6b89762f0f9))
+
 ## [1.0.2](https://github.com/aidenlx/folder-note-core/compare/1.0.1...1.0.2) (2021-09-07)
 
 
