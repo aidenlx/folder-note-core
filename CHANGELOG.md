@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/aidenlx/folder-note-core/compare/1.1.0...1.2.0) (2021-09-12)
+
+
+### Features
+
+* settings: add batch convert between strategies; api: new option to specify strategy ([0fd5bf2](https://github.com/aidenlx/folder-note-core/commit/0fd5bf2408dade7bed194727d1ad4cd4c8ea984e))
+
 # [1.1.0](https://github.com/aidenlx/folder-note-core/compare/1.0.2...1.1.0) (2021-09-12)
 
 
