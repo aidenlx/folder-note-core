@@ -1,4 +1,5 @@
 import assertNever from "assert-never";
+import log from "loglevel";
 import { around } from "monkey-around";
 import { App, Plugin, PluginManifest } from "obsidian";
 
@@ -21,12 +22,16 @@ export default class FNCore extends Plugin {
 
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
+    log.setDefaultLevel("ERROR");
     let finder = new NoteFinder(this);
     this.finder = finder;
     const plugin = this;
     this.api = {
       get renderCoreSettings() {
         return plugin.settingTab.renderCoreSettings;
+      },
+      get renderLogLevel() {
+        return plugin.settingTab.setLogLevel;
       },
       importSettings: (cfg) => {
         if (cfg.folderNotePref !== undefined) {
@@ -117,7 +122,7 @@ export default class FNCore extends Plugin {
   }
 
   async onload() {
-    console.log("loading folder-note-core");
+    log.info("loading folder-note-core");
 
     await this.loadSettings();
 

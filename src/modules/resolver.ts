@@ -1,4 +1,5 @@
 import assertNever from "assert-never";
+import log from "loglevel";
 import { Modal, Notice, TFile, TFolder } from "obsidian";
 import { basename, extname, join, parse } from "path";
 
@@ -40,7 +41,7 @@ export default class NoteFinder {
   ) => {
     if (strategy === undefined) strategy = this.settings.folderNotePref;
     if (!isMd(note)) {
-      console.info("getFolderPath(%o): given file not markdown", note);
+      log.info("getFolderPath(%o): given file not markdown", note);
       return null;
     }
     let parent: string, base: string;
@@ -53,7 +54,7 @@ export default class NoteFinder {
     }
 
     if (!parent) {
-      console.info("getFolderPath(%o): no folder note for root dir", note);
+      log.info("getFolderPath(%o): no folder note for root dir", note);
       return null;
     }
 
@@ -66,21 +67,21 @@ export default class NoteFinder {
         if (newFolder) return getSiblingFolder();
         else if (base === this.settings.indexName) return parent;
         else {
-          console.info("getFolderPath(%o): note name invaild", note);
+          log.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Inside:
         if (newFolder) return getSiblingFolder();
         else if (base === basename(parent)) return parent;
         else {
-          console.info("getFolderPath(%o): note name invaild", note);
+          log.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Outside: {
         const dir = getSiblingFolder();
         if (newFolder || base === basename(dir)) return dir;
         else {
-          console.info("getFolderPath(%o): note name invaild", note);
+          log.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       }
@@ -103,10 +104,7 @@ export default class NoteFinder {
     if (strategy === undefined) strategy = this.settings.folderNotePref;
 
     if (typeof folder === "string" && extname(folder) !== "") {
-      console.error(
-        "getFolderNotePath(%o): given path contains extension",
-        folder,
-      );
+      log.error("getFolderNotePath(%o): given path contains extension", folder);
       return null;
     }
 
@@ -211,14 +209,14 @@ export default class NoteFinder {
     const newFolderPath = this.getFolderPath(file, true),
       folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
     if (folderExist) {
-      console.info(
+      log.info(
         "createFolderForNote(%o): folder already exists",
         file,
         file.path,
       );
       if (!dryrun) new Notice("Folder already exists");
     } else if (!newFolderPath) {
-      console.info(
+      log.info(
         "createFolderForNote(%o): no vaild linked folder path for %s",
         file,
         file.path,

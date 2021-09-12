@@ -1,3 +1,4 @@
+import log from "loglevel";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { dirname, extname, join } from "path";
 
@@ -22,6 +23,7 @@ export const getParentPath = (src: string): string | null => {
   else return path;
 };
 
+/** Opreation on TAbstractFile */
 export const afOp = (
   target: TAbstractFile,
   fileOp: (file: TFile) => void,
@@ -32,7 +34,7 @@ export const afOp = (
   } else if (target instanceof TFolder) {
     folderOp(target);
   } else {
-    console.error("unexpected TAbstractFile type", target);
+    log.error("unexpected TAbstractFile type", target);
     throw new Error("unexpected TAbstractFile type");
   }
 };

@@ -1,3 +1,4 @@
+import log, { LogLevel, LogLevelNumbers } from "loglevel";
 import {
   ButtonComponent,
   debounce,
@@ -20,6 +21,7 @@ export interface FNCoreSettings {
   indexName: string;
   autoRename: boolean;
   folderNoteTemplate: string;
+  logLevel: LogLevelNumbers;
 }
 
 export const DEFAULT_SETTINGS: FNCoreSettings = {
@@ -28,6 +30,7 @@ export const DEFAULT_SETTINGS: FNCoreSettings = {
   indexName: "_about_",
   autoRename: true,
   folderNoteTemplate: "# {{FOLDER_NAME}}",
+  logLevel: 4,
 };
 
 const LocDescMap: Record<NoteLoc, string> = {
@@ -45,6 +48,7 @@ export class FNCoreSettingTab extends PluginSettingTab {
     let { containerEl } = this;
     containerEl.empty();
     this.renderCoreSettings(containerEl);
+    this.setLogLevel(containerEl);
   }
 
   renderCoreSettings = (target: HTMLElement) => {
@@ -56,6 +60,27 @@ export class FNCoreSettingTab extends PluginSettingTab {
     this.setTemplate(target);
     if (this.plugin.settings.folderNotePref !== NoteLoc.Index)
       this.setAutoRename(target);
+  };
+
+  setLogLevel = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
+      .setName("Log Level of folder-note-core")
+      .setDesc("Change this options if debug is required")
+      .addDropdown((dp) =>
+        dp
+          .then((dp) =>
+            Object.entries(log.levels).forEach(([key, val]) =>
+              dp.addOption(val.toString(), key),
+            ),
+          )
+          .setValue(log.getLevel().toString())
+          .onChange(async (val) => {
+            const level = +val as LogLevelNumbers;
+            log.setLevel(level);
+            this.plugin.settings.logLevel = level;
+            await this.plugin.saveSettings();
+          }),
+      );
   };
 
   setDeleteWithFolder = (containerEl: HTMLElement) => {

@@ -28,6 +28,7 @@ export type FolderNotePath = {
 export default interface FolderNoteAPI {
   importSettings(settings: Partial<OldConfig>): void;
   renderCoreSettings(target: HTMLElement): void;
+  renderLogLevel(targer: HTMLElement): void;
 
   getFolderFromNote(note: TFile | string, strategy?: NoteLoc): TFolder | null;
   /**
