@@ -87,7 +87,7 @@ export default class NoteFinder {
   // Get Folder Note from Folder
   getFolderNote: API["getFolderNote"] = (folder) =>
     this.findFolderNote(this.getFolderNotePath(folder));
-  findFolderNote = (info: FolderNotePath): TFile | null => {
+  findFolderNote = (info: FolderNotePath | null): TFile | null => {
     if (!info) return null;
 
     const note = this.vault.getAbstractFileByPath(info.path);
@@ -95,16 +95,17 @@ export default class NoteFinder {
     else return null;
   };
   getFolderNotePath: API["getFolderNotePath"] = (folder) => {
-    const dirPath = typeof folder === "string" ? folder : folder.path;
-    if (extname(dirPath) !== "")
-      throw new TypeError("given path contains extension");
-
-    const parent = getParentPath(dirPath);
-    if (!parent) {
-      console.info(
-        "getFolderNotePath(%o): no folder note for root dir",
+    if (typeof folder === "string" && extname(folder) !== "") {
+      console.error(
+        "getFolderNotePath(%o): given path contains extension",
         folder,
       );
+      return null;
+    }
+
+    const dirPath = typeof folder === "string" ? folder : folder.path,
+      parent = getParentPath(dirPath);
+    if (!parent) {
       return null;
     }
 

@@ -18,7 +18,7 @@ export type FolderNotePath = {
   name: string;
   /** full filepath that can be used to get TFile */
   path: string;
-} | null;
+};
 export default interface FolderNoteAPI {
   importSettings(settings: Partial<OldConfig>): void;
   renderCoreSettings(target: HTMLElement): void;
@@ -35,7 +35,7 @@ export default interface FolderNoteAPI {
   getFolderNote(folder: TFolder | string): TFile | null;
   /** Get the path to the folder note for given file based on setting,
    * @returns not guaranteed to exists  */
-  getFolderNotePath(folder: TFolder | string): FolderNotePath;
+  getFolderNotePath(folder: TFolder | string): FolderNotePath | null;
 
   /** Generate folder note content for given folder based on template */
   getNewFolderNote(folder: TFolder): string;
