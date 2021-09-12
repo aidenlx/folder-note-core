@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/aidenlx/folder-note-core/compare/1.2.2...1.2.3) (2021-09-12)
+
+
+### Bug Fixes
+
+* **resolver:** fix fail to get folder note path when path contains dots ([ea9162e](https://github.com/aidenlx/folder-note-core/commit/ea9162e264a5e1ba5d49fb23c187bfc7bd6520c8))
+
 ## [1.2.2](https://github.com/aidenlx/folder-note-core/compare/1.2.1...1.2.2) (2021-09-12)
 
 
