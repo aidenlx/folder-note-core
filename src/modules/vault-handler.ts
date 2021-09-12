@@ -24,7 +24,7 @@ export default class VaultHandler {
     return this.plugin.settings;
   }
   private get finder() {
-    return this.plugin.finder;
+    return this.plugin.resolver;
   }
   plugin: FNCore;
 

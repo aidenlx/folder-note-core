@@ -10,7 +10,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     LinkToParentFolder,
     DeleteLinkedFolder,
     DeleteNoteAndLinkedFolder,
-  } = plugin.finder;
+  } = plugin.resolver;
 
   plugin.addCommand({
     id: "make-doc-folder-note",
@@ -96,7 +96,7 @@ export const AddOptionsForNote = (plugin: FNCore) => {
 
 export const AddOptionsForFolder = (plugin: FNCore) => {
   const { DeleteFolderNote, CreateFolderNote, DeleteNoteAndLinkedFolder } =
-    plugin.finder;
+    plugin.resolver;
   plugin.registerEvent(
     plugin.app.workspace.on("file-menu", (menu, af, source) => {
       if (af instanceof TFolder) {

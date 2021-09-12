@@ -270,7 +270,7 @@ class SwitchStrategyDialog extends Modal {
     } else if (From === To) {
       new Notice("Convert between same strategy, skipping...");
     } else {
-      const { getFolderNote, getFolderNotePath } = this.plugin.finder;
+      const { getFolderNote, getFolderNotePath } = this.plugin.resolver;
       const folderNotes = this.app.vault
         .getAllLoadedFiles()
         .filter((af): af is TFolder => af instanceof TFolder && !af.isRoot())

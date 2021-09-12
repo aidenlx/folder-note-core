@@ -1,13 +1,13 @@
 import assertNever from "assert-never";
 import log from "loglevel";
 import { Modal, Notice, TFile, TFolder } from "obsidian";
-import { basename, extname, join, parse } from "path";
+import { basename, join, parse } from "path";
 
 import FNCore from "../fnc-main";
 import { getParentPath, isMd } from "../misc";
 import API, { FolderNotePath, NoteLoc } from "../typings/api";
 
-export default class NoteFinder {
+export default class NoteResolver {
   plugin: FNCore;
   constructor(plugin: FNCore) {
     this.plugin = plugin;
@@ -102,11 +102,6 @@ export default class NoteFinder {
   };
   getFolderNotePath: API["getFolderNotePath"] = (folder, strategy) => {
     if (strategy === undefined) strategy = this.settings.folderNotePref;
-
-    if (typeof folder === "string" && extname(folder) !== "") {
-      log.error("getFolderNotePath(%o): given path contains extension", folder);
-      return null;
-    }
 
     const dirPath = typeof folder === "string" ? folder : folder.path,
       parent = getParentPath(dirPath);

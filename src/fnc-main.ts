@@ -4,7 +4,7 @@ import { around } from "monkey-around";
 import { App, Plugin, PluginManifest } from "obsidian";
 
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
-import NoteFinder from "./modules/resolver";
+import NoteResolver from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
 import API, { API_NAME, FNCEvents, NoteLoc } from "./typings/api";
@@ -15,7 +15,7 @@ const API_NAME: API_NAME extends keyof typeof window ? API_NAME : never =
 export default class FNCore extends Plugin {
   settings: FNCoreSettings = DEFAULT_SETTINGS;
   vaultHandler = new VaultHandler(this);
-  finder: NoteFinder;
+  resolver: NoteResolver;
   api: API;
 
   settingTab = new FNCoreSettingTab(this);
@@ -23,8 +23,8 @@ export default class FNCore extends Plugin {
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
     log.setDefaultLevel("ERROR");
-    let finder = new NoteFinder(this);
-    this.finder = finder;
+    let resolver = new NoteResolver(this);
+    this.resolver = resolver;
     const plugin = this;
     this.api = {
       get renderCoreSettings() {
@@ -60,34 +60,34 @@ export default class FNCore extends Plugin {
         return plugin.getNewFolderNote;
       },
       get getFolderFromNote() {
-        return finder.getFolderFromNote;
+        return resolver.getFolderFromNote;
       },
       get getFolderPath() {
-        return finder.getFolderPath;
+        return resolver.getFolderPath;
       },
       get getFolderNote() {
-        return finder.getFolderNote;
+        return resolver.getFolderNote;
       },
       get getFolderNotePath() {
-        return finder.getFolderNotePath;
+        return resolver.getFolderNotePath;
       },
       get DeleteLinkedFolder() {
-        return finder.DeleteLinkedFolder;
+        return resolver.DeleteLinkedFolder;
       },
       get LinkToParentFolder() {
-        return finder.LinkToParentFolder;
+        return resolver.LinkToParentFolder;
       },
       get DeleteNoteAndLinkedFolder() {
-        return finder.DeleteNoteAndLinkedFolder;
+        return resolver.DeleteNoteAndLinkedFolder;
       },
       get createFolderForNote() {
-        return finder.createFolderForNote;
+        return resolver.createFolderForNote;
       },
       get DeleteFolderNote() {
-        return finder.DeleteFolderNote;
+        return resolver.DeleteFolderNote;
       },
       get CreateFolderNote() {
-        return finder.CreateFolderNote;
+        return resolver.CreateFolderNote;
       },
     };
     (window[API_NAME] = this.api) &&
@@ -106,7 +106,7 @@ export default class FNCore extends Plugin {
                 case NoteLoc.Inside:
                   break;
                 case NoteLoc.Outside: {
-                  const folder = plugin.finder.getFolderFromNote(sourcePath);
+                  const folder = plugin.resolver.getFolderFromNote(sourcePath);
                   if (folder) return folder;
                   break;
                 }
