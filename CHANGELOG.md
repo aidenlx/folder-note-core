@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/aidenlx/folder-note-core/compare/1.2.3...1.2.4) (2021-09-15)
+
+
+### Bug Fixes
+
+* **resolver:** fix dot in folder path breaks folder note resolution ([6fdb8dd](https://github.com/aidenlx/folder-note-core/commit/6fdb8dd17054bb8ba119f44d4e74a8a9ebdfb5e0))
+
 ## [1.2.3](https://github.com/aidenlx/folder-note-core/compare/1.2.2...1.2.3) (2021-09-12)
 
 
