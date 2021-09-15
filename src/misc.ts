@@ -1,9 +1,9 @@
 import log from "loglevel";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
-import { dirname, extname, join } from "path";
+import { dirname, join } from "path";
 
 export const isMd = (file: TFile | string) =>
-  typeof file === "string" ? extname(file) === ".md" : file.extension === "md";
+  typeof file === "string" ? file.endsWith(".md") : file.extension === "md";
 
 /**
  * @param newName include extension

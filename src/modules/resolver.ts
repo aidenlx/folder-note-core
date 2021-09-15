@@ -1,7 +1,7 @@
 import assertNever from "assert-never";
 import log from "loglevel";
 import { Modal, Notice, TFile, TFolder } from "obsidian";
-import { basename, join, parse } from "path";
+import { basename as getBase, join } from "path";
 
 import FNCore from "../fnc-main";
 import { getParentPath, isMd } from "../misc";
@@ -49,7 +49,7 @@ export default class NoteResolver {
       base = note.basename;
       parent = getParentPath(note.path) ?? "";
     } else {
-      base = parse(note).name;
+      base = note.replace(/\.md$/, "");
       parent = getParentPath(note) ?? "";
     }
 
@@ -72,14 +72,14 @@ export default class NoteResolver {
         }
       case NoteLoc.Inside:
         if (newFolder) return getSiblingFolder();
-        else if (base === basename(parent)) return parent;
+        else if (base === getBase(parent)) return parent;
         else {
           log.info("getFolderPath(%o): note name invaild", note);
           return null;
         }
       case NoteLoc.Outside: {
         const dir = getSiblingFolder();
-        if (newFolder || base === basename(dir)) return dir;
+        if (newFolder || base === getBase(dir)) return dir;
         else {
           log.info("getFolderPath(%o): note name invaild", note);
           return null;
@@ -106,6 +106,7 @@ export default class NoteResolver {
     const dirPath = typeof folder === "string" ? folder : folder.path,
       parent = getParentPath(dirPath);
     if (!parent) {
+      // is root folder
       return null;
     }
 
@@ -118,11 +119,11 @@ export default class NoteResolver {
         dir = dirPath;
         break;
       case NoteLoc.Inside:
-        basename = parse(dirPath).name;
+        basename = getBase(dirPath);
         dir = dirPath;
         break;
       case NoteLoc.Outside:
-        basename = parse(dirPath).name;
+        basename = getBase(dirPath);
         dir = parent;
         break;
       default:
