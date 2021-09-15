@@ -49,7 +49,7 @@ export default class NoteResolver {
       base = note.basename;
       parent = getParentPath(note.path) ?? "";
     } else {
-      base = note.replace(/\.md$/, "");
+      base = getBase(note).slice(0, -3); // remove ending ".md"
       parent = getParentPath(note) ?? "";
     }
 
