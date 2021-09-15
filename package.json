@@ -1,6 +1,6 @@
 {
   "name": "@aidenlx/folder-note-core",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Provide core features and API for folder notes",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

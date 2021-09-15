@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/aidenlx/folder-note-core/compare/1.2.4...1.2.5) (2021-09-15)
+
+
+### Bug Fixes
+
+* **resolver:** fix getFolderPath failed to get filename when given path string ([39d0164](https://github.com/aidenlx/folder-note-core/commit/39d016474b7b741737070f6477fbfa8565130987))
+
 ## [1.2.4](https://github.com/aidenlx/folder-note-core/compare/1.2.3...1.2.4) (2021-09-15)
 
 
