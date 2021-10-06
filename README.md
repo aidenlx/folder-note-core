@@ -2,7 +2,7 @@
 
 Provide core features and API for [folder notes](https://github.com/aidenlx/alx-folder-note).
 
-- [create folder note](https://github.com/aidenlx/alx-folder-note/wiki/create-folder-note) easily, with [mulitple preferences](https://github.com/aidenlx/alx-folder-note/wiki/folder-note-pref) and [template support](https://github.com/aidenlx/alx-folder-note/wiki/core-settings#template)
+- [create folder note](https://github.com/aidenlx/alx-folder-note/wiki/create-folder-note) easily, with [multiple preferences](https://github.com/aidenlx/alx-folder-note/wiki/folder-note-pref) and [template support](https://github.com/aidenlx/alx-folder-note/wiki/core-settings#template)
 - folder and folder note working as one
   - [folder and linked note synced as one](https://github.com/aidenlx/alx-folder-note/wiki/core-settings#auto-rename): change folder name from folder note; folder note moves with your folder
   - [delete folder within folder note](https://github.com/aidenlx/alx-folder-note/wiki/delete-folder-from-folder-note)
