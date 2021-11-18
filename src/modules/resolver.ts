@@ -31,7 +31,7 @@ export default class NoteResolver {
   /**
    * Get path of given note/notePath's folder based on setting
    * @param note notePath or note TFile
-   * @param newFolder if the path is used to create new folder
+   * @param newFolder if true, return folder in the same folder as note
    * @returns folder path, will return null if note basename invaild and newFolder=false
    */
   getFolderPath: API["getFolderPath"] = (
@@ -202,15 +202,23 @@ export default class NoteResolver {
   ): Promise<boolean> => {
     if (!isMd(file)) return false;
 
-    const newFolderPath = this.getFolderPath(file, true),
+    const folderForNotePath = this.getFolderPath(file, false);
+    if (folderForNotePath && (await this.vault.exists(folderForNotePath))) {
+      log.info("createFolderForNote(%o): already folder note", file, file.path);
+      if (!dryrun) new Notice("Already folder note");
+      return false;
+    }
+
+    const newFolderPath = this.getFolderPath(file, false),
       folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
     if (folderExist) {
       log.info(
-        "createFolderForNote(%o): folder already exists",
+        "createFolderForNote(%o): target folder to create already exists",
         file,
         file.path,
       );
-      if (!dryrun) new Notice("Folder already exists");
+      if (!dryrun) new Notice("Target folder to create already exists");
+      return false;
     } else if (!newFolderPath) {
       log.info(
         "createFolderForNote(%o): no vaild linked folder path for %s",
@@ -218,9 +226,7 @@ export default class NoteResolver {
         file.path,
       );
       if (!dryrun) new Notice("No vaild linked folder path for: " + file.path);
-    }
-
-    if (!folderExist && newFolderPath && !dryrun) {
+    } else if (!dryrun) {
       await this.vault.createFolder(newFolderPath);
       let newNotePath: string | null;
       switch (this.settings.folderNotePref) {
@@ -238,6 +244,7 @@ export default class NoteResolver {
       }
       if (newNotePath) this.vault.rename(file, newNotePath);
     }
+
     return !!(!folderExist && newFolderPath);
   };
 
