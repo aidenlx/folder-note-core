@@ -1,7 +1,7 @@
 {
   "id": "folder-note-core",
   "name": "Folder Note Core",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "minAppVersion": "0.12.5",
   "description": "Provide core features and API for folder notes",
   "author": "AidenLx",

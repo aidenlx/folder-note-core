@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/aidenlx/folder-note-core/compare/1.2.5...1.2.6) (2021-11-18)
+
+
+### Bug Fixes
+
+* **resolver:** fix createFolderForNote exec when already folder note in index&inside-same strategy ([68d2e73](https://github.com/aidenlx/folder-note-core/commit/68d2e73812121bc192cb9591c69d57376792c14a))
+
 ## [1.2.5](https://github.com/aidenlx/folder-note-core/compare/1.2.4...1.2.5) (2021-09-15)
 
 
