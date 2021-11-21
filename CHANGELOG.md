@@ -1,3 +1,7 @@
+* feat(api): add menu item and api to open folder note of given folder (11abe93)
+* Merge pull request #5 from sergunich/patch-1 (94b25e8)
+* Fix for `No vaild linked folder path` (3f5a3cc)
+
 ## [1.2.6](https://github.com/aidenlx/folder-note-core/compare/1.2.5...1.2.6) (2021-11-18)
 
 
