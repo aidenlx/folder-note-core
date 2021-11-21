@@ -95,11 +95,23 @@ export const AddOptionsForNote = (plugin: FNCore) => {
 };
 
 export const AddOptionsForFolder = (plugin: FNCore) => {
-  const { DeleteFolderNote, CreateFolderNote, DeleteNoteAndLinkedFolder } =
-    plugin.resolver;
+  const {
+    OpenFolderNote,
+    DeleteFolderNote,
+    CreateFolderNote,
+    DeleteNoteAndLinkedFolder,
+  } = plugin.resolver;
   plugin.registerEvent(
     plugin.app.workspace.on("file-menu", (menu, af, source) => {
       if (af instanceof TFolder) {
+        if (OpenFolderNote(af, true)) {
+          menu.addItem((item) =>
+            item
+              .setIcon("enter")
+              .setTitle("Open Folder Note")
+              .onClick(() => OpenFolderNote(af)),
+          );
+        }
         if (DeleteFolderNote(af, true)) {
           menu.addItem((item) =>
             item

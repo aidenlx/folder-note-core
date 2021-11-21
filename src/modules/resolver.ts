@@ -250,6 +250,17 @@ export default class NoteResolver {
 
   // Folder Operations
 
+  OpenFolderNote: API["OpenFolderNote"] = (
+    folder: TFolder | string,
+    newLeaf?: boolean,
+    dryrun = false,
+  ) => {
+    const noteResult = this.getFolderNote(folder);
+    if (noteResult && !dryrun) {
+      this.plugin.app.workspace.openLinkText(noteResult.path, "", newLeaf);
+    }
+    return !!noteResult;
+  };
   /**
    * @returns return false if folder note not exists
    */

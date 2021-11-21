@@ -7,7 +7,7 @@ import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteResolver from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
-import API, { API_NAME, FNCEvents, NoteLoc } from "./typings/api";
+import API, { API_NAME, FNCEvents, getApi, NoteLoc } from "./typings/api";
 
 const ALX_FOLDER_NOTE = "alx-folder-note";
 const API_NAME: API_NAME extends keyof typeof window ? API_NAME : never =
@@ -15,7 +15,7 @@ const API_NAME: API_NAME extends keyof typeof window ? API_NAME : never =
 export default class FNCore extends Plugin {
   settings: FNCoreSettings = DEFAULT_SETTINGS;
   vaultHandler = new VaultHandler(this);
-  resolver: NoteResolver;
+  resolver = new NoteResolver(this);
   api: API;
 
   settingTab = new FNCoreSettingTab(this);
@@ -23,76 +23,13 @@ export default class FNCore extends Plugin {
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
     log.setDefaultLevel("ERROR");
-    let resolver = new NoteResolver(this);
-    this.resolver = resolver;
     const plugin = this;
-    this.api = {
-      get renderCoreSettings() {
-        return plugin.settingTab.renderCoreSettings;
-      },
-      get renderLogLevel() {
-        return plugin.settingTab.setLogLevel;
-      },
-      importSettings: (cfg) => {
-        if (cfg.folderNotePref !== undefined) {
-          switch (cfg.folderNotePref) {
-            case 0:
-              cfg.folderNotePref = NoteLoc.Index;
-              break;
-            case 1:
-              cfg.folderNotePref = NoteLoc.Inside;
-              break;
-            case 2:
-              cfg.folderNotePref = NoteLoc.Outside;
-              break;
-            default:
-              break;
-          }
-          let toImport = Object.fromEntries(
-            Object.entries(cfg).filter(([k, v]) => v !== undefined),
-          ) as FNCoreSettings;
-
-          this.settings = { ...this.settings, ...toImport };
-          this.saveSettings();
-        }
-      },
-      get getNewFolderNote() {
-        return plugin.getNewFolderNote;
-      },
-      get getFolderFromNote() {
-        return resolver.getFolderFromNote;
-      },
-      get getFolderPath() {
-        return resolver.getFolderPath;
-      },
-      get getFolderNote() {
-        return resolver.getFolderNote;
-      },
-      get getFolderNotePath() {
-        return resolver.getFolderNotePath;
-      },
-      get DeleteLinkedFolder() {
-        return resolver.DeleteLinkedFolder;
-      },
-      get LinkToParentFolder() {
-        return resolver.LinkToParentFolder;
-      },
-      get DeleteNoteAndLinkedFolder() {
-        return resolver.DeleteNoteAndLinkedFolder;
-      },
-      get createFolderForNote() {
-        return resolver.createFolderForNote;
-      },
-      get DeleteFolderNote() {
-        return resolver.DeleteFolderNote;
-      },
-      get CreateFolderNote() {
-        return resolver.CreateFolderNote;
-      },
-    };
+    this.api = getApi(plugin);
     (window[API_NAME] = this.api) &&
-      this.register(() => (window[API_NAME] = undefined));
+      this.register(() => delete window[API_NAME]);
     this.trigger("folder-note:api-ready", this.api);
+
+    // patch create new note location for outside-same
     this.register(
       around(app.fileManager, {
         // eslint-disable-next-line prefer-arrow/prefer-arrow-functions

@@ -1,5 +1,8 @@
 import { TFile, TFolder } from "obsidian";
 
+import FNCore from "../fnc-main";
+import { FNCoreSettings } from "../settings";
+
 interface OldConfig {
   /**
    *  Index=0, Inside=1, Outside=2,
@@ -54,6 +57,7 @@ export default interface FolderNoteAPI {
   /** Generate folder note content for given folder based on template */
   getNewFolderNote(folder: TFolder): string;
 
+  OpenFolderNote(folder: TFolder | string, dryrun?: boolean): boolean;
   /**
    * @returns return false if no linked folder found
    */
@@ -99,3 +103,73 @@ export type FNCEvents =
       folder: [folder: TFolder, oldPath: string],
     ]
   | [name: "folder-note:create", note: TFile, folder: TFolder];
+
+export const getApi = (plugin: FNCore): FolderNoteAPI => {
+  return {
+    get renderCoreSettings() {
+      return plugin.settingTab.renderCoreSettings;
+    },
+    get renderLogLevel() {
+      return plugin.settingTab.setLogLevel;
+    },
+    importSettings: (cfg) => {
+      if (cfg.folderNotePref !== undefined) {
+        switch (cfg.folderNotePref) {
+          case 0:
+            cfg.folderNotePref = NoteLoc.Index;
+            break;
+          case 1:
+            cfg.folderNotePref = NoteLoc.Inside;
+            break;
+          case 2:
+            cfg.folderNotePref = NoteLoc.Outside;
+            break;
+          default:
+            break;
+        }
+        let toImport = Object.fromEntries(
+          Object.entries(cfg).filter(([k, v]) => v !== undefined),
+        ) as FNCoreSettings;
+
+        plugin.settings = { ...plugin.settings, ...toImport };
+        plugin.saveSettings();
+      }
+    },
+    get getNewFolderNote() {
+      return plugin.getNewFolderNote;
+    },
+    get getFolderFromNote() {
+      return plugin.resolver.getFolderFromNote;
+    },
+    get getFolderPath() {
+      return plugin.resolver.getFolderPath;
+    },
+    get getFolderNote() {
+      return plugin.resolver.getFolderNote;
+    },
+    get getFolderNotePath() {
+      return plugin.resolver.getFolderNotePath;
+    },
+    get DeleteLinkedFolder() {
+      return plugin.resolver.DeleteLinkedFolder;
+    },
+    get LinkToParentFolder() {
+      return plugin.resolver.LinkToParentFolder;
+    },
+    get DeleteNoteAndLinkedFolder() {
+      return plugin.resolver.DeleteNoteAndLinkedFolder;
+    },
+    get createFolderForNote() {
+      return plugin.resolver.createFolderForNote;
+    },
+    get DeleteFolderNote() {
+      return plugin.resolver.DeleteFolderNote;
+    },
+    get CreateFolderNote() {
+      return plugin.resolver.CreateFolderNote;
+    },
+    get OpenFolderNote() {
+      return plugin.resolver.OpenFolderNote;
+    },
+  };
+};
