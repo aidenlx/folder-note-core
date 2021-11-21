@@ -209,7 +209,7 @@ export default class NoteResolver {
       return false;
     }
 
-    const newFolderPath = this.getFolderPath(file, false),
+    const newFolderPath = this.getFolderPath(file, true),
       folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
     if (folderExist) {
       log.info(
