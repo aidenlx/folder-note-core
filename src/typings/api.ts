@@ -1,4 +1,4 @@
-import { TFile, TFolder } from "obsidian";
+import { OpenViewState, TFile, TFolder } from "obsidian";
 
 import FNCore from "../fnc-main";
 import { FNCoreSettings } from "../settings";
@@ -57,7 +57,11 @@ export default interface FolderNoteAPI {
   /** Generate folder note content for given folder based on template */
   getNewFolderNote(folder: TFolder): string;
 
-  OpenFolderNote(folder: TFolder | string, dryrun?: boolean): boolean;
+  OpenFolderNote(
+    folder: TFolder | string,
+    dryrun?: boolean,
+    config?: { newLeaf?: boolean; openViewState?: OpenViewState },
+  ): boolean;
   /**
    * @returns return false if no linked folder found
    */

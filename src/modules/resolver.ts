@@ -1,6 +1,6 @@
 import assertNever from "assert-never";
 import log from "loglevel";
-import { Modal, Notice, TFile, TFolder } from "obsidian";
+import { Modal, Notice, OpenViewState, TFile, TFolder } from "obsidian";
 import { basename as getBase, join } from "path";
 
 import FNCore from "../fnc-main";
@@ -252,12 +252,17 @@ export default class NoteResolver {
 
   OpenFolderNote: API["OpenFolderNote"] = (
     folder: TFolder | string,
-    newLeaf?: boolean,
     dryrun = false,
+    config?: { newLeaf?: boolean; openViewState?: OpenViewState },
   ) => {
     const noteResult = this.getFolderNote(folder);
     if (noteResult && !dryrun) {
-      this.plugin.app.workspace.openLinkText(noteResult.path, "", newLeaf);
+      this.plugin.app.workspace.openLinkText(
+        noteResult.path,
+        "",
+        config?.newLeaf,
+        config?.openViewState,
+      );
     }
     return !!noteResult;
   };
