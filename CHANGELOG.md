@@ -1,3 +1,5 @@
+* fix(api): fix OpenFolderNote not implement properly; add config param in OpenFolderNote (e533095)
+
 * feat(api): add menu item and api to open folder note of given folder (11abe93)
 * Merge pull request #5 from sergunich/patch-1 (94b25e8)
 * Fix for `No vaild linked folder path` (3f5a3cc)
