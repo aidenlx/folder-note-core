@@ -1,8 +1,21 @@
-* fix(api): fix OpenFolderNote not implement properly; add config param in OpenFolderNote (e533095)
+## [1.3.1](https://github.com/aidenlx/folder-note-core/compare/1.3.1...1.3.2) (2021-11-23)
 
-* feat(api): add menu item and api to open folder note of given folder (11abe93)
-* Merge pull request #5 from sergunich/patch-1 (94b25e8)
-* Fix for `No vaild linked folder path` (3f5a3cc)
+
+### Bug Fixes
+
+* **api:** fix OpenFolderNote not implement properly; add config param in OpenFolderNote ([e533095](https://github.com/aidenlx/folder-note-core/commit/e53309521101dec5f5d745cb7422e3dc0285389b)), closes [#6](https://github.com/aidenlx/folder-note-core/issues/6)
+
+
+
+# [1.3.0](https://github.com/aidenlx/folder-note-core/compare/1.3.1...1.3.2) (2021-11-21)
+
+
+### Features
+
+* **api:** add menu item and api to open folder note of given folder ([11abe93](https://github.com/aidenlx/folder-note-core/commit/11abe93746eee15c76bbd360c26bfe6fbdd21df7)), closes [#3](https://github.com/aidenlx/folder-note-core/issues/3)
+* **resolver** fix createFolderForNote not working properly ([3f5a3cc](https://github.com/aidenlx/folder-note-core/commit/3f5a3cc910dfcc5861a8804f9af8709336a28632))
+
+
 
 ## [1.2.6](https://github.com/aidenlx/folder-note-core/compare/1.2.5...1.2.6) (2021-11-18)
 
@@ -101,9 +114,7 @@
 ### BREAKING CHANGES
 
 * **api:** FolderNoteAPI is no longer a default export
-* **api:** - getFolderNote() no longer accept second arg when given path
-- getFolderNote()
-and getFolderFromNote() will return null when given file invaild (detail provided in console)
+* **api:** getFolderNote() no longer accept second arg when given path; getFolderNote() and getFolderFromNote() will return null when given file invaild (detail provided in console)
 
 # [0.2.0](https://github.com/aidenlx/folder-note-core/compare/0.1.0...0.2.0) (2021-09-01)
 
