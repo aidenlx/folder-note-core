@@ -78,6 +78,7 @@ export default class FNCore extends Plugin {
 
   async loadSettings() {
     this.settings = { ...this.settings, ...(await this.loadData()) };
+    log.setLevel(this.settings.logLevel);
   }
 
   async saveSettings() {
