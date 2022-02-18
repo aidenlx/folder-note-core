@@ -1,4 +1,4 @@
-import log, { LogLevel, LogLevelNumbers } from "loglevel";
+import type { LogLevelNumbers } from "loglevel";
 import {
   ButtonComponent,
   debounce,
@@ -13,6 +13,7 @@ import {
 } from "obsidian";
 
 import FNCore from "./fnc-main";
+import log from "./logger";
 import { FolderNotePath, NoteLoc } from "./typings/api";
 
 export interface FNCoreSettings {
@@ -48,7 +49,6 @@ export class FNCoreSettingTab extends PluginSettingTab {
     let { containerEl } = this;
     containerEl.empty();
     this.renderCoreSettings(containerEl);
-    this.setLogLevel(containerEl);
   }
 
   renderCoreSettings = (target: HTMLElement) => {

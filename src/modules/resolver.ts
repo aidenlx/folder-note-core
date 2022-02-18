@@ -1,9 +1,9 @@
 import assertNever from "assert-never";
-import log from "loglevel";
 import { Modal, Notice, OpenViewState, TFile, TFolder } from "obsidian";
 import { basename as getBase, join } from "path";
 
 import FNCore from "../fnc-main";
+import log from "../logger";
 import { getParentPath, isMd } from "../misc";
 import API, { FolderNotePath, NoteLoc } from "../typings/api";
 

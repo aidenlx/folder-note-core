@@ -1,4 +1,4 @@
-import log from "loglevel";
+import log from "./logger";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { dirname, join } from "path";
 

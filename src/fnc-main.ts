@@ -1,8 +1,8 @@
 import assertNever from "assert-never";
-import log from "loglevel";
 import { around } from "monkey-around";
 import { App, Plugin, PluginManifest } from "obsidian";
 
+import log from "./logger";
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
 import NoteResolver from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
