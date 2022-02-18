@@ -51,6 +51,9 @@
   "peerDependencies": {
     "obsidian": "^0.12.17"
   },
+  "dependencies": {
+    "loglevel": "^1.8.0"
+  },
   "browser": {
     "path": "path-browserify"
   },
