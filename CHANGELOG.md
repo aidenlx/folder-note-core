@@ -1,3 +1,11 @@
+## [1.3.2](https://github.com/aidenlx/folder-note-core/compare/1.3.1...1.3.2) (2022-02-19)
+
+
+### Bug Fixes
+
+* fix log level pollution to other plugins ([cff9774](https://github.com/aidenlx/folder-note-core/commit/cff977458d33e16f39910c7da1c2c7f0910f4a60))
+* fix loglevel in setting not being applied on load ([fcfbca3](https://github.com/aidenlx/folder-note-core/commit/fcfbca335a09831687f1f449d7b13c63a2364260))
+
 ## [1.3.1](https://github.com/aidenlx/folder-note-core/compare/1.3.1...1.3.2) (2021-11-23)
 
 
