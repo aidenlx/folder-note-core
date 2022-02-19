@@ -7,11 +7,14 @@
   "files": [
     "lib/**/*"
   ],
+  "type": "module",
+  "packageManager": "yarn@3.1.1",
   "scripts": {
-    "dev": "cross-env BUILD=dev node esbuild.js",
+    "dev": "cross-env BUILD=dev node esbuild.config.mjs",
     "check": "tsc --noEmit",
-    "lib": "rm -rf lib && cross-env BUILD=production node esbuild-lib.js && tsc --project tsconfig-lib.json --emitDeclarationOnly",
-    "build": "npm run lib && cross-env BUILD=production node esbuild.js",
+    "prelib": "rm -rf lib && node ./scripts/cp-dts.mjs",
+    "lib": "tsc --project tsconfig-lib.json",
+    "build": "yarn run lib && cross-env BUILD=production node esbuild.config.mjs",
     "prettier": "prettier --write 'src/**/*.+(ts|tsx|json|html|css)'",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "release": "release-it"
@@ -20,6 +23,9 @@
   "author": "AidenLx",
   "license": "MIT",
   "devDependencies": {
+    "@aidenlx/eslint-config": "^0.1.2",
+    "@aidenlx/prettier-config": "^0.1.0",
+    "@aidenlx/ts-config": "^0.1.2",
     "@release-it/bumper": "^3.0.1",
     "@release-it/conventional-changelog": "^3.3.0",
     "@types/json-schema": "^7.0.9",
@@ -27,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "assert-never": "^1.2.1",
+    "conventional-changelog-angular": "^5.0.13",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.14.0",
@@ -41,18 +48,17 @@
     "json": "^11.0.0",
     "loglevel": "^1.8.0",
     "monkey-around": "^2.2.0",
-    "obsidian": "^0.12.17",
+    "obsidian": "github:obsidianmd/obsidian-api",
     "path-browserify": "^1.0.1",
     "prettier": "^2.5.0",
     "release-it": "^14.11.8",
+    "semver": "^7.3.5",
     "tslib": "^2.3.1",
     "typescript": "^4.5.2"
   },
-  "peerDependencies": {
-    "obsidian": "^0.12.17"
-  },
   "dependencies": {
-    "loglevel": "^1.8.0"
+    "loglevel": "^1.8.0",
+    "obsidian": "github:obsidianmd/obsidian-api"
   },
   "browser": {
     "path": "path-browserify"
@@ -67,10 +73,6 @@
         "npm run eslint"
       ],
       "after:bump": [
-        "json -I -f manifest.json -e \"this.version='${version}'\"",
-        "json -I -f versions.json -e \"this['${version}']='$(cat manifest.json | json minAppVersion)'\"",
-        "sed -i '' \"s/available for Obsidian v.*$/available for Obsidian v$(cat manifest.json | json minAppVersion)+./\" README.md",
-        "git add .",
         "npm run build"
       ],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
@@ -100,6 +102,9 @@
       "@release-it/conventional-changelog": {
         "preset": "angular",
         "infile": "CHANGELOG.md"
+      },
+      "./scripts/version-bump.cjs": {
+        "indent": 2
       }
     }
   },

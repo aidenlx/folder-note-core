@@ -1,0 +1,4 @@
+{
+  "extends": "@aidenlx/eslint-config",
+  "ignorePatterns": ["lib/**/*"]
+}

@@ -1,6 +1,7 @@
-import log from "./logger";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { dirname, join } from "path";
+
+import log from "./logger";
 
 export const isMd = (file: TFile | string) =>
   typeof file === "string" ? file.endsWith(".md") : file.extension === "md";
