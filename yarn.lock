@@ -5,6 +5,15 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@aidenlx/esbuild-plugin-obsidian@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "@aidenlx/esbuild-plugin-obsidian@npm:0.1.4"
+  peerDependencies:
+    esbuild: ^0.13.0
+  checksum: a1672506fd0d0dd6bce3e6061c11656945228f59542fd8d0c967492661af04b71e87a01c98220e62cb1d0d459018d4dcf5e1d6fc3ed443adbd28e5504e28b892
+  languageName: node
+  linkType: hard
+
 "@aidenlx/eslint-config@npm:^0.1.2":
   version: 0.1.2
   resolution: "@aidenlx/eslint-config@npm:0.1.2::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40aidenlx%2Feslint-config%2F-%2Feslint-config-0.1.2.tgz"
@@ -27,40 +36,52 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@aidenlx/folder-note-core@workspace:."
   dependencies:
+    "@aidenlx/esbuild-plugin-obsidian": ^0.1.4
     "@aidenlx/eslint-config": ^0.1.2
+    "@aidenlx/obsidian-plugin-bumper": ^0.1.3
     "@aidenlx/prettier-config": ^0.1.0
+    "@aidenlx/release-it-config": ^0.1.3
     "@aidenlx/ts-config": ^0.1.2
     "@release-it/bumper": ^3.0.1
-    "@release-it/conventional-changelog": ^3.3.0
+    "@release-it/conventional-changelog": ^4.1.0
     "@types/json-schema": ^7.0.9
-    "@types/node": ^16.11.10
-    "@typescript-eslint/eslint-plugin": ^5.4.0
-    "@typescript-eslint/parser": ^5.4.0
+    "@types/node": ^17.0.18
+    "@typescript-eslint/eslint-plugin": ^5.12.0
+    "@typescript-eslint/parser": ^5.12.0
     assert-never: ^1.2.1
     conventional-changelog-angular: ^5.0.13
     cross-env: ^7.0.3
     cz-conventional-changelog: ^3.3.0
-    esbuild: ^0.13.0
-    eslint: ^8.3.0
-    eslint-config-prettier: ^8.3.0
+    esbuild: ^0.14.23
+    eslint: ^8.9.0
+    eslint-config-prettier: ^8.4.0
     eslint-import-resolver-typescript: ^2.5.0
-    eslint-plugin-import: ^2.25.3
-    eslint-plugin-jsdoc: ^37.0.3
+    eslint-plugin-import: ^2.25.4
+    eslint-plugin-jsdoc: ^37.9.4
     eslint-plugin-prefer-arrow: ^1.2.3
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-simple-import-sort: ^7.0.0
     json: ^11.0.0
     loglevel: ^1.8.0
-    monkey-around: ^2.2.0
+    monkey-around: ^2.3.0
     obsidian: "github:obsidianmd/obsidian-api"
     path-browserify: ^1.0.1
-    prettier: ^2.5.0
-    release-it: ^14.11.8
+    prettier: ^2.5.1
+    release-it: ^14.12.4
     semver: ^7.3.5
     tslib: ^2.3.1
-    typescript: ^4.5.2
+    typescript: ^4.5.5
   languageName: unknown
   linkType: soft
+
+"@aidenlx/obsidian-plugin-bumper@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@aidenlx/obsidian-plugin-bumper@npm:0.1.3"
+  peerDependencies:
+    release-it: ^14.0.0
+  checksum: 857c6c8c941fb0885f310d7139d71e8d4fc92b362be957bf6aa8b6bef55805d671e89e6e4fc30b1d41da9cca1ec85ac2fc02e7ada30e6da80b3ff9507b5b0fac
+  languageName: node
+  linkType: hard
 
 "@aidenlx/prettier-config@npm:^0.1.0":
   version: 0.1.0
@@ -68,6 +89,16 @@ __metadata:
   peerDependencies:
     prettier: ^2.5.1
   checksum: 8d01599791f76be7349c679f1b61e5302351a51b539388bad60126d8e142c02ae284f440bfb02b0f3e3d6659d8caab3e67d9276d6975322c81fdb0b9f7a62a45
+  languageName: node
+  linkType: hard
+
+"@aidenlx/release-it-config@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@aidenlx/release-it-config@npm:0.1.3"
+  peerDependencies:
+    "@aidenlx/obsidian-plugin-bumper": ^0.1.3
+    release-it: ^14.0.0
+  checksum: f31e744bc76a00e5fbea557c45b4539cd374a381c6ceb15ba93c36cf90334774dad3038be27eaad02ce09d6da1452e6ca5d3c92128c08a2aa33c6b6eb3fd59dc
   languageName: node
   linkType: hard
 
@@ -459,17 +490,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it/conventional-changelog@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@release-it/conventional-changelog@npm:3.3.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40release-it%2Fconventional-changelog%2F-%2Fconventional-changelog-3.3.0.tgz"
+"@release-it/conventional-changelog@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@release-it/conventional-changelog@npm:4.1.0"
   dependencies:
     concat-stream: ^2.0.0
-    conventional-changelog: ^3.1.24
+    conventional-changelog: ^3.1.25
     conventional-recommended-bump: ^6.1.0
     prepend-file: ^2.0.0
   peerDependencies:
-    release-it: ^14.11.5
-  checksum: af3d74e1715278926f9516822df23db444982e44622506012711675b1b5172617fabae977161c2bd8958cf12b190d0816e8a81ec7f11c82efbe7307cc2c53a3f
+    release-it: ^14.12.1
+  checksum: 7168a9eb60f0f8eeec5ce96f6c5d4de18aaf9047fdd1fe5e6c9a422e11e8b9ae72efe9e8847146c3f3f025eadc5259952510f24f594abccc10f7340d62b8171e
   languageName: node
   linkType: hard
 
@@ -605,10 +636,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.10":
-  version: 16.11.25
-  resolution: "@types/node@npm:16.11.25::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fnode%2F-%2Fnode-16.11.25.tgz"
-  checksum: 0b6e25a81364be89256ad1a36341e27b387e646d3186e270108a8bb7b6ecdfdf5ae037aa1c75a5117b8a7509c80093b75431cd5cfcfbc4d553b52e7db2ca272e
+"@types/node@npm:^17.0.18":
+  version: 17.0.18
+  resolution: "@types/node@npm:17.0.18"
+  checksum: 6c4edfc2b3ba2342a9c3d56e934c5245948ab752f4dc04bd6790b9603e6ebc53bc4f5befc3662e207f7dba2ddd17ccf657f915e319ea7cdd4f77b851079d1611
   languageName: node
   linkType: hard
 
@@ -644,9 +675,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.4.0":
+"@typescript-eslint/eslint-plugin@npm:^5.12.0":
   version: 5.12.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:5.12.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40typescript-eslint%2Feslint-plugin%2F-%2Feslint-plugin-5.12.0.tgz"
+  resolution: "@typescript-eslint/eslint-plugin@npm:5.12.0"
   dependencies:
     "@typescript-eslint/scope-manager": 5.12.0
     "@typescript-eslint/type-utils": 5.12.0
@@ -667,9 +698,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.4.0":
+"@typescript-eslint/parser@npm:^5.12.0":
   version: 5.12.0
-  resolution: "@typescript-eslint/parser@npm:5.12.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40typescript-eslint%2Fparser%2F-%2Fparser-5.12.0.tgz"
+  resolution: "@typescript-eslint/parser@npm:5.12.0"
   dependencies:
     "@typescript-eslint/scope-manager": 5.12.0
     "@typescript-eslint/types": 5.12.0
@@ -1498,9 +1529,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog@npm:^3.1.24":
+"conventional-changelog@npm:^3.1.25":
   version: 3.1.25
-  resolution: "conventional-changelog@npm:3.1.25::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fconventional-changelog%2F-%2Fconventional-changelog-3.1.25.tgz"
+  resolution: "conventional-changelog@npm:3.1.25"
   dependencies:
     conventional-changelog-angular: ^5.0.12
     conventional-changelog-atom: ^2.0.8
@@ -1963,146 +1994,162 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-android-arm64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-android-arm64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-android-arm64%2F-%2Fesbuild-android-arm64-0.13.15.tgz"
+"esbuild-android-arm64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-android-arm64@npm:0.14.23"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-darwin-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-darwin-64%2F-%2Fesbuild-darwin-64-0.13.15.tgz"
+"esbuild-darwin-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-darwin-64@npm:0.14.23"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-arm64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-darwin-arm64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-darwin-arm64%2F-%2Fesbuild-darwin-arm64-0.13.15.tgz"
+"esbuild-darwin-arm64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-darwin-arm64@npm:0.14.23"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-freebsd-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-freebsd-64%2F-%2Fesbuild-freebsd-64-0.13.15.tgz"
+"esbuild-freebsd-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-freebsd-64@npm:0.14.23"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-arm64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-freebsd-arm64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-freebsd-arm64%2F-%2Fesbuild-freebsd-arm64-0.13.15.tgz"
+"esbuild-freebsd-arm64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-freebsd-arm64@npm:0.14.23"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-32@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-32@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-32%2F-%2Fesbuild-linux-32-0.13.15.tgz"
+"esbuild-linux-32@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-32@npm:0.14.23"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-linux-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-64%2F-%2Fesbuild-linux-64-0.13.15.tgz"
+"esbuild-linux-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-64@npm:0.14.23"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-arm64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-arm64%2F-%2Fesbuild-linux-arm64-0.13.15.tgz"
+"esbuild-linux-arm64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-arm64@npm:0.14.23"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-arm@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-arm%2F-%2Fesbuild-linux-arm-0.13.15.tgz"
+"esbuild-linux-arm@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-arm@npm:0.14.23"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"esbuild-linux-mips64le@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-mips64le@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-mips64le%2F-%2Fesbuild-linux-mips64le-0.13.15.tgz"
+"esbuild-linux-mips64le@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-mips64le@npm:0.14.23"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
 
-"esbuild-linux-ppc64le@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-linux-ppc64le@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-linux-ppc64le%2F-%2Fesbuild-linux-ppc64le-0.13.15.tgz"
+"esbuild-linux-ppc64le@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-ppc64le@npm:0.14.23"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"esbuild-netbsd-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-netbsd-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-netbsd-64%2F-%2Fesbuild-netbsd-64-0.13.15.tgz"
+"esbuild-linux-riscv64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-riscv64@npm:0.14.23"
+  conditions: os=linux & cpu=riscv64
+  languageName: node
+  linkType: hard
+
+"esbuild-linux-s390x@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-linux-s390x@npm:0.14.23"
+  conditions: os=linux & cpu=s390x
+  languageName: node
+  linkType: hard
+
+"esbuild-netbsd-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-netbsd-64@npm:0.14.23"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-openbsd-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-openbsd-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-openbsd-64%2F-%2Fesbuild-openbsd-64-0.13.15.tgz"
+"esbuild-openbsd-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-openbsd-64@npm:0.14.23"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-sunos-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-sunos-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-sunos-64%2F-%2Fesbuild-sunos-64-0.13.15.tgz"
+"esbuild-sunos-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-sunos-64@npm:0.14.23"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-32@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-windows-32@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-windows-32%2F-%2Fesbuild-windows-32-0.13.15.tgz"
+"esbuild-windows-32@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-windows-32@npm:0.14.23"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-windows-64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-windows-64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-windows-64%2F-%2Fesbuild-windows-64-0.13.15.tgz"
+"esbuild-windows-64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-windows-64@npm:0.14.23"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-arm64@npm:0.13.15":
-  version: 0.13.15
-  resolution: "esbuild-windows-arm64@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild-windows-arm64%2F-%2Fesbuild-windows-arm64-0.13.15.tgz"
+"esbuild-windows-arm64@npm:0.14.23":
+  version: 0.14.23
+  resolution: "esbuild-windows-arm64@npm:0.14.23"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.13.0":
-  version: 0.13.15
-  resolution: "esbuild@npm:0.13.15::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild%2F-%2Fesbuild-0.13.15.tgz"
+"esbuild@npm:^0.14.23":
+  version: 0.14.23
+  resolution: "esbuild@npm:0.14.23"
   dependencies:
-    esbuild-android-arm64: 0.13.15
-    esbuild-darwin-64: 0.13.15
-    esbuild-darwin-arm64: 0.13.15
-    esbuild-freebsd-64: 0.13.15
-    esbuild-freebsd-arm64: 0.13.15
-    esbuild-linux-32: 0.13.15
-    esbuild-linux-64: 0.13.15
-    esbuild-linux-arm: 0.13.15
-    esbuild-linux-arm64: 0.13.15
-    esbuild-linux-mips64le: 0.13.15
-    esbuild-linux-ppc64le: 0.13.15
-    esbuild-netbsd-64: 0.13.15
-    esbuild-openbsd-64: 0.13.15
-    esbuild-sunos-64: 0.13.15
-    esbuild-windows-32: 0.13.15
-    esbuild-windows-64: 0.13.15
-    esbuild-windows-arm64: 0.13.15
+    esbuild-android-arm64: 0.14.23
+    esbuild-darwin-64: 0.14.23
+    esbuild-darwin-arm64: 0.14.23
+    esbuild-freebsd-64: 0.14.23
+    esbuild-freebsd-arm64: 0.14.23
+    esbuild-linux-32: 0.14.23
+    esbuild-linux-64: 0.14.23
+    esbuild-linux-arm: 0.14.23
+    esbuild-linux-arm64: 0.14.23
+    esbuild-linux-mips64le: 0.14.23
+    esbuild-linux-ppc64le: 0.14.23
+    esbuild-linux-riscv64: 0.14.23
+    esbuild-linux-s390x: 0.14.23
+    esbuild-netbsd-64: 0.14.23
+    esbuild-openbsd-64: 0.14.23
+    esbuild-sunos-64: 0.14.23
+    esbuild-windows-32: 0.14.23
+    esbuild-windows-64: 0.14.23
+    esbuild-windows-arm64: 0.14.23
   dependenciesMeta:
     esbuild-android-arm64:
       optional: true
@@ -2126,6 +2173,10 @@ __metadata:
       optional: true
     esbuild-linux-ppc64le:
       optional: true
+    esbuild-linux-riscv64:
+      optional: true
+    esbuild-linux-s390x:
+      optional: true
     esbuild-netbsd-64:
       optional: true
     esbuild-openbsd-64:
@@ -2140,7 +2191,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: d5fac8f28a6328592e45f9d49a7e98420cf2c2a3ff5a753bbf011ab79bcb5c062209ef862d3ae0875d8f2a50d40c112b0224e8b419a7cbffc6e2b02cee11ef7e
+  checksum: 41d26f9022a9f95a1ccf280fd6c2cf2684264663c03d5d4338bfab17710292b9c2ca45624ed55d9f37d7be5f29557ebd6d101b21ed5592fb0b6e6ac5e76bc58d
   languageName: node
   linkType: hard
 
@@ -2172,9 +2223,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.3.0":
+"eslint-config-prettier@npm:^8.4.0":
   version: 8.4.0
-  resolution: "eslint-config-prettier@npm:8.4.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-config-prettier%2F-%2Feslint-config-prettier-8.4.0.tgz"
+  resolution: "eslint-config-prettier@npm:8.4.0"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
@@ -2219,9 +2270,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.25.3":
+"eslint-plugin-import@npm:^2.25.4":
   version: 2.25.4
-  resolution: "eslint-plugin-import@npm:2.25.4::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-plugin-import%2F-%2Feslint-plugin-import-2.25.4.tgz"
+  resolution: "eslint-plugin-import@npm:2.25.4"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flat: ^1.2.5
@@ -2242,9 +2293,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:^37.0.3":
+"eslint-plugin-jsdoc@npm:^37.9.4":
   version: 37.9.4
-  resolution: "eslint-plugin-jsdoc@npm:37.9.4::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-plugin-jsdoc%2F-%2Feslint-plugin-jsdoc-37.9.4.tgz"
+  resolution: "eslint-plugin-jsdoc@npm:37.9.4"
   dependencies:
     "@es-joy/jsdoccomment": ~0.20.1
     comment-parser: 1.3.0
@@ -2338,9 +2389,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.3.0":
+"eslint@npm:^8.9.0":
   version: 8.9.0
-  resolution: "eslint@npm:8.9.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Feslint%2F-%2Feslint-8.9.0.tgz"
+  resolution: "eslint@npm:8.9.0"
   dependencies:
     "@eslint/eslintrc": ^1.1.0
     "@humanwhocodes/config-array": ^0.9.2
@@ -4086,9 +4137,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monkey-around@npm:^2.2.0":
+"monkey-around@npm:^2.3.0":
   version: 2.3.0
-  resolution: "monkey-around@npm:2.3.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fmonkey-around%2F-%2Fmonkey-around-2.3.0.tgz"
+  resolution: "monkey-around@npm:2.3.0"
   checksum: 88e6cf8b6bf452f47bc3b77731a33a95964fc6877a95988337183561e95d0f1b9569bb99106155a3a3d0a46379d6a8a5271f12a0013c9990ecb3f34bf5b25ba0
   languageName: node
   linkType: hard
@@ -4595,9 +4646,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.5.0":
+"prettier@npm:^2.5.1":
   version: 2.5.1
-  resolution: "prettier@npm:2.5.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fprettier%2F-%2Fprettier-2.5.1.tgz"
+  resolution: "prettier@npm:2.5.1"
   bin:
     prettier: bin-prettier.js
   checksum: 21b9408476ea1c544b0e45d51ceb94a84789ff92095abb710942d780c862d0daebdb29972d47f6b4d0f7ebbfb0ffbf56cc2cfa3e3e9d1cca54864af185b15b66
@@ -4828,9 +4879,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"release-it@npm:^14.11.8":
+"release-it@npm:^14.12.4":
   version: 14.12.4
-  resolution: "release-it@npm:14.12.4::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Frelease-it%2F-%2Frelease-it-14.12.4.tgz"
+  resolution: "release-it@npm:14.12.4"
   dependencies:
     "@iarna/toml": 2.2.5
     "@octokit/rest": 18.12.0
@@ -5631,7 +5682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.3, typescript@npm:^4.5.2":
+"typescript@npm:^4.4.3":
   version: 4.5.5
   resolution: "typescript@npm:4.5.5::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Ftypescript%2F-%2Ftypescript-4.5.5.tgz"
   bin:
@@ -5641,9 +5692,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.2#~builtin<compat/typescript>":
+"typescript@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
   version: 4.5.5
   resolution: "typescript@patch:typescript@npm%3A4.5.5%3A%3A__archiveUrl=https%253A%252F%252Fregistry.npmmirror.com%252Ftypescript%252F-%252Ftypescript-4.5.5.tgz#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: c05c318d79c690f101d7ffb34cd6c7d6bbd884d3af9cefe7749ad0cd6be43c7082f098280982ca945dcba23fde34a08fed9602bb26540936baf8c0520727d3ba
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
