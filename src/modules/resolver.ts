@@ -20,6 +20,14 @@ export default class NoteResolver {
     return this.plugin.app.vault;
   }
 
+  private rename(file: TFile, newNotePath: string)
+  {
+    let old_file = this.vault.getAbstractFileByPath(file.path);
+    if (old_file) {
+      this.plugin.app.fileManager.renameFile(old_file, newNotePath);
+    }
+  }
+
   getFolderFromNote: API["getFolderFromNote"] = (note, strategy) => {
     if (!isMd(note)) return null;
     const folderPath = this.getFolderPath(note, false, strategy);
@@ -165,7 +173,7 @@ export default class NoteResolver {
         shouldRun = fnPath && !this.getFolderNote(file.parent);
       if (shouldRun && !dryrun) {
         const { path } = fnPath;
-        this.vault.rename(file, path);
+        this.rename(file, path);
       }
       return !!shouldRun;
     } else return false;
@@ -242,7 +250,9 @@ export default class NoteResolver {
         default:
           assertNever(this.settings.folderNotePref);
       }
-      if (newNotePath) this.vault.rename(file, newNotePath);
+      if (newNotePath) {
+        this.rename(file, newNotePath);
+      } 
     }
 
     return !!(!folderExist && newFolderPath);
