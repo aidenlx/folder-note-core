@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/aidenlx/folder-note-core/compare/1.3.3...1.3.4) (2022-03-14)
+
+
+### Bug Fixes
+
+* update links when perform "Make Doc Folder Note" and "Link to Parent Folder" ([#14](https://github.com/aidenlx/folder-note-core/issues/14)) ([c4e1046](https://github.com/aidenlx/folder-note-core/commit/c4e10464c808b473cc819879d32b319b209435cf))
+
 ## [1.3.3](https://github.com/aidenlx/folder-note-core/compare/1.3.2...1.3.3) (2022-02-20)
 
 

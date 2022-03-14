@@ -30,7 +30,7 @@ For advanced feature such as file explorer patches and folder overviews, install
 
 ## Compatibility
 
-The required API feature is only available for Obsidian v0.12.5+.
+The required API feature is only available for Obsidian v0.13.24+.
 
 ## Installation
 
