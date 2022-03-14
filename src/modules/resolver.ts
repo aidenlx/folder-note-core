@@ -242,7 +242,8 @@ export default class NoteResolver {
         default:
           assertNever(this.settings.folderNotePref);
       }
-      if (newNotePath) this.plugin.app.fileManager.renameFile(file, newNotePath);
+      if (newNotePath)
+        this.plugin.app.fileManager.renameFile(file, newNotePath);
     }
 
     return !!(!folderExist && newFolderPath);
