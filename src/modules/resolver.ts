@@ -1,5 +1,5 @@
 import assertNever from "assert-never";
-import { Modal, Notice, OpenViewState, TAbstractFile, TFile, TFolder } from "obsidian";
+import { Modal, Notice, OpenViewState, TFile, TFolder } from "obsidian";
 import { basename as getBase, join } from "path";
 
 import FNCore from "../fnc-main";
@@ -165,7 +165,7 @@ export default class NoteResolver {
         shouldRun = fnPath && !this.getFolderNote(file.parent);
       if (shouldRun && !dryrun) {
         const { path } = fnPath;
-        this.plugin.app.fileManager.renameFile(file as TAbstractFile, path); 
+        this.plugin.app.fileManager.renameFile(file, path);
       }
       return !!shouldRun;
     } else return false;
@@ -242,9 +242,7 @@ export default class NoteResolver {
         default:
           assertNever(this.settings.folderNotePref);
       }
-      if (newNotePath) {
-        this.plugin.app.fileManager.renameFile(file as TAbstractFile, newNotePath);
-      } 
+      if (newNotePath) this.plugin.app.fileManager.renameFile(file, newNotePath);
     }
 
     return !!(!folderExist && newFolderPath);
