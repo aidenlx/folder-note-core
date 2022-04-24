@@ -1,3 +1,10 @@
+## [1.3.5](https://github.com/aidenlx/folder-note-core/compare/1.3.4...1.3.5) (2022-04-24)
+
+
+### Bug Fixes
+
+* fix command check fail when active view not markdown ([ec0a84c](https://github.com/aidenlx/folder-note-core/commit/ec0a84c78c1a8c8fc42d839e118f460968dbe781))
+
 ## [1.3.4](https://github.com/aidenlx/folder-note-core/compare/1.3.3...1.3.4) (2022-03-14)
 
 
