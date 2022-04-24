@@ -193,6 +193,30 @@ export default class NoteResolver {
     return !!(file && folder);
   };
 
+  createFolderForNoteCheck = (file: TFile) => {
+    const result = this._createFolderForNote(file);
+    if (!result) return false;
+    const { folderExist, newFolderPath } = result;
+    return !!(!folderExist && newFolderPath);
+  };
+  _createFolderForNote = (file: TFile) => {
+    if (!isMd(file)) return null;
+
+    const folderForNotePath = this.getFolderPath(file, false);
+    if (
+      folderForNotePath &&
+      this.vault.getAbstractFileByPath(folderForNotePath)
+    ) {
+      log.info("createFolderForNote(%o): already folder note", file, file.path);
+      return null;
+    }
+
+    const newFolderPath = this.getFolderPath(file, true),
+      folderExist =
+        newFolderPath && this.vault.getAbstractFileByPath(newFolderPath);
+    return { newFolderPath, folderExist };
+  };
+
   /**
    * @returns return false if folder already exists
    */
@@ -200,17 +224,9 @@ export default class NoteResolver {
     file: TFile,
     dryrun = false,
   ): Promise<boolean> => {
-    if (!isMd(file)) return false;
-
-    const folderForNotePath = this.getFolderPath(file, false);
-    if (folderForNotePath && (await this.vault.exists(folderForNotePath))) {
-      log.info("createFolderForNote(%o): already folder note", file, file.path);
-      if (!dryrun) new Notice("Already folder note");
-      return false;
-    }
-
-    const newFolderPath = this.getFolderPath(file, true),
-      folderExist = newFolderPath && (await this.vault.exists(newFolderPath));
+    const result = this._createFolderForNote(file);
+    if (!result) return false;
+    const { newFolderPath, folderExist } = result;
     if (folderExist) {
       log.info(
         "createFolderForNote(%o): target folder to create already exists",
@@ -243,9 +259,8 @@ export default class NoteResolver {
           assertNever(this.settings.folderNotePref);
       }
       if (newNotePath)
-        this.plugin.app.fileManager.renameFile(file, newNotePath);
+        await this.plugin.app.fileManager.renameFile(file, newNotePath);
     }
-
     return !!(!folderExist && newFolderPath);
   };
 

@@ -7,6 +7,7 @@ import { NoteLoc } from "../typings/api";
 export const AddOptionsForNote = (plugin: FNCore) => {
   const {
     createFolderForNote,
+    createFolderForNoteCheck,
     LinkToParentFolder,
     DeleteLinkedFolder,
     DeleteNoteAndLinkedFolder,
@@ -16,10 +17,10 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     id: "make-doc-folder-note",
     name: "Make current document folder note",
     checkCallback: (checking) => {
-      const view = plugin.app.workspace.activeLeaf?.view as MarkdownView;
+      const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
       if (checking) {
-        return view instanceof MarkdownView;
-      } else {
+        return !!view && createFolderForNoteCheck(view.file);
+      } else if (!!view) {
         createFolderForNote(view.file);
       }
     },
@@ -29,8 +30,8 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     id: "link-to-parent-folder",
     name: "Link to Parent Folder",
     checkCallback: (checking) => {
-      const view = plugin.app.workspace.activeLeaf?.view as MarkdownView;
-      return LinkToParentFolder(view.file, checking);
+      const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
+      return !!view && LinkToParentFolder(view.file, checking);
     },
     hotkeys: [],
   });
@@ -38,10 +39,8 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     id: "delete-linked-folder",
     name: "Delete linked folder",
     checkCallback: (checking) => {
-      const view = plugin.app.workspace.activeLeaf?.view as MarkdownView;
-      if (view instanceof MarkdownView) {
-        return DeleteLinkedFolder(view.file, checking);
-      } else return false;
+      const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
+      return !!view && DeleteLinkedFolder(view.file, checking);
     },
     hotkeys: [],
   });
@@ -49,10 +48,8 @@ export const AddOptionsForNote = (plugin: FNCore) => {
     id: "delete-with-linked-folder",
     name: "Delete note and linked folder",
     checkCallback: (checking) => {
-      const view = plugin.app.workspace.activeLeaf?.view as MarkdownView;
-      if (view instanceof MarkdownView) {
-        return DeleteNoteAndLinkedFolder(view.file, checking);
-      } else return false;
+      const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
+      return !!view && DeleteNoteAndLinkedFolder(view.file, checking);
     },
     hotkeys: [],
   });
