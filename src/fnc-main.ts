@@ -4,6 +4,7 @@ import { App, Plugin, PluginManifest } from "obsidian";
 
 import log from "./logger";
 import { AddOptionsForFolder, AddOptionsForNote } from "./modules/commands";
+import { patchLinkResolverForFolder } from "./modules/linker-patch";
 import NoteResolver from "./modules/resolver";
 import VaultHandler from "./modules/vault-handler";
 import { DEFAULT_SETTINGS, FNCoreSettings, FNCoreSettingTab } from "./settings";
@@ -66,6 +67,7 @@ export default class FNCore extends Plugin {
     if (!this.app.plugins.enabledPlugins.has(ALX_FOLDER_NOTE))
       this.addSettingTab(this.settingTab);
 
+    patchLinkResolverForFolder(this);
     AddOptionsForNote(this);
     AddOptionsForFolder(this);
     this.vaultHandler.registerEvent();

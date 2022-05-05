@@ -19,6 +19,7 @@ import { FolderNotePath, NoteLoc } from "./typings/api";
 export interface FNCoreSettings {
   folderNotePref: NoteLoc;
   deleteOutsideNoteWithFolder: boolean;
+  patchLinkResolverForFolder: boolean;
   indexName: string;
   autoRename: boolean;
   folderNoteTemplate: string;
@@ -27,6 +28,7 @@ export interface FNCoreSettings {
 
 export const DEFAULT_SETTINGS: FNCoreSettings = {
   folderNotePref: NoteLoc.Inside,
+  patchLinkResolverForFolder: true,
   deleteOutsideNoteWithFolder: false,
   indexName: "_about_",
   autoRename: true,
@@ -52,14 +54,16 @@ export class FNCoreSettingTab extends PluginSettingTab {
   }
 
   renderCoreSettings = (target: HTMLElement) => {
+    const { folderNotePref } = this.plugin.settings;
     this.setStrategy(target);
-    if (this.plugin.settings.folderNotePref === NoteLoc.Index)
-      this.setIndexName(target);
-    else if (this.plugin.settings.folderNotePref === NoteLoc.Outside)
+    if (folderNotePref === NoteLoc.Index) this.setIndexName(target);
+    else if (folderNotePref === NoteLoc.Outside)
       this.setDeleteWithFolder(target);
+    if (folderNotePref === NoteLoc.Inside || folderNotePref === NoteLoc.Index)
+      this.setPatchLinkResolver(target);
+
     this.setTemplate(target);
-    if (this.plugin.settings.folderNotePref !== NoteLoc.Index)
-      this.setAutoRename(target);
+    if (folderNotePref !== NoteLoc.Index) this.setAutoRename(target);
   };
 
   setLogLevel = (containerEl: HTMLElement) => {
@@ -78,6 +82,20 @@ export class FNCoreSettingTab extends PluginSettingTab {
             const level = +val as LogLevelNumbers;
             log.setLevel(level);
             this.plugin.settings.logLevel = level;
+            await this.plugin.saveSettings();
+          }),
+      );
+  };
+
+  setPatchLinkResolver = (containerEl: HTMLElement) => {
+    new Setting(containerEl)
+      .setName("Link Resolver Patch")
+      .setDesc("Allow links to refer to folder note with folder name")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.patchLinkResolverForFolder)
+          .onChange(async (value) => {
+            this.plugin.settings.patchLinkResolverForFolder = value;
             await this.plugin.saveSettings();
           }),
       );
