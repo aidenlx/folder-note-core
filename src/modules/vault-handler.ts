@@ -34,7 +34,7 @@ export default class VaultHandler {
 
   registerEvent = () => {
     this.plugin.registerEvent(this.on("create", this.onChange));
-    this.plugin.registerEvent(this.on("rename", this.onChange));
+    this.plugin.registerEvent(this.on("rename", this.onRename));
     this.plugin.registerEvent(this.on("delete", this.onDelete));
   };
 
@@ -53,6 +53,10 @@ export default class VaultHandler {
         ? true
         : false;
     return renameOnly || syncLoc;
+  }
+
+  onRename = (af: TAbstractFile, oldPath: string) => {
+    setTimeout(() => this.onChange(af, oldPath), 500);
   }
 
   onChange = (af: TAbstractFile, oldPath?: string) => {
