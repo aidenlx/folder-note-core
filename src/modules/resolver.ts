@@ -136,6 +136,27 @@ export default class NoteResolver {
       path: dir === "/" ? basename + ".md" : join(dir, basename + ".md"),
     };
   };
+  getFolderNotePathAfterMove: API["getFolderNotePathAfterMove"] = (folderAfterMove, folderBeforeMovePath, strategy) => {
+    if (!folderBeforeMovePath) {
+      return null;
+    }
+
+    if (strategy === undefined) strategy = this.settings.folderNotePref;
+
+    switch (strategy) {
+      case NoteLoc.Index:
+        return this.findFolderNote(this.getFolderNotePath(folderAfterMove.path, strategy));
+      case NoteLoc.Inside:
+        const notePath = join(folderAfterMove.path, getBase(folderBeforeMovePath) + ".md")
+        const note = this.vault.getAbstractFileByPath(notePath);
+        if (note && note instanceof TFile) return note;
+        else return null;
+      case NoteLoc.Outside:
+        return this.findFolderNote(this.getFolderNotePath(folderBeforeMovePath, strategy));
+      default:
+        assertNever(strategy);
+    }
+  };
 
   // Note Operations
 

@@ -57,6 +57,8 @@ export default interface FolderNoteAPI {
   /** Generate folder note content for given folder based on template */
   getNewFolderNote(folder: TFolder): string;
 
+  getFolderNotePathAfterMove(folderAfterMove: TFolder, folderBeforeMovePath?: string, strategy?: NoteLoc): TFile | null;
+
   OpenFolderNote(
     folder: TFolder | string,
     dryrun?: boolean,
@@ -153,6 +155,9 @@ export const getApi = (plugin: FNCore): FolderNoteAPI => {
     },
     get getFolderNotePath() {
       return plugin.resolver.getFolderNotePath;
+    },
+    get getFolderNotePathAfterMove() {
+      return plugin.resolver.getFolderNotePathAfterMove;
     },
     get DeleteLinkedFolder() {
       return plugin.resolver.DeleteLinkedFolder;
