@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/aidenlx/folder-note-core/compare/1.3.5...1.3.6) (2022-05-16)
+
+
+### Bug Fixes
+
+* fix typescript error caused by out-of-date obsidian version ([7fcd15a](https://github.com/aidenlx/folder-note-core/commit/7fcd15a29da33b7807edf3c6a385c1aab9e61471))
+
 ## [1.3.5](https://github.com/aidenlx/folder-note-core/compare/1.3.4...1.3.5) (2022-04-24)
 
 
