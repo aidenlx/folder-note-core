@@ -34,7 +34,7 @@ export default class VaultHandler {
 
   registerEvent = () => {
     this.plugin.registerEvent(this.on("create", this.onChange));
-    this.plugin.registerEvent(this.on("rename", this.onChange));
+    this.plugin.registerEvent(this.on("rename", this.onRename));
     this.plugin.registerEvent(this.on("delete", this.onDelete));
   };
 
@@ -55,8 +55,12 @@ export default class VaultHandler {
     return renameOnly || syncLoc;
   }
 
+  onRename = (af: TAbstractFile, oldPath: string) => {
+    setTimeout(() => this.onChange(af, oldPath), 500);
+  }
+
   onChange = (af: TAbstractFile, oldPath?: string) => {
-    const { getFolderNote, getFolderFromNote, getFolderNotePath } = this.finder;
+    const { getFolderNote, getFolderFromNote, getFolderNotePath, getFolderNotePathAfterMove } = this.finder;
 
     function getOldLinked(af: TFile): TFolder | null;
     function getOldLinked(af: TFolder): TFile | null;
@@ -64,7 +68,7 @@ export default class VaultHandler {
     // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
     function getOldLinked(af: TAbstractFile): TFile | TFolder | null {
       if (af instanceof TFolder) {
-        return oldPath ? getFolderNote(oldPath) : null;
+        return getFolderNotePathAfterMove(af, oldPath);
       } else if (af instanceof TFile) {
         return oldPath && isMd(oldPath) ? getFolderFromNote(oldPath) : null;
       } else return null;
